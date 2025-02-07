@@ -1,18 +1,70 @@
 // main.js
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('problems.json')
-      .then(response => response.json())
+    const terminal = document.getElementById('terminal');
+  
+    /** 
+     * **displaySelectionPage**: Clears the terminal and shows a list of available problem sets.
+     * If provided, an **errorMessage** is displayed at the top.
+     */
+    function displaySelectionPage(errorMessage) {
+      terminal.innerHTML = '';
+      if (errorMessage) {
+        const errorEl = document.createElement('div');
+        errorEl.className = 'instructions blue';
+        errorEl.textContent = errorMessage;
+        terminal.appendChild(errorEl);
+      }
+      const selectionTitle = document.createElement('div');
+      selectionTitle.className = 'instructions blue';
+      selectionTitle.textContent = 'Select a problem set:';
+      terminal.appendChild(selectionTitle);
+  
+      fetch('problemSets.json')
+        .then(response => response.json())
+        .then(problemSets => {
+          problemSets.forEach(set => {
+            const link = document.createElement('a');
+            link.href = window.location.pathname + '?set=' + encodeURIComponent(set.file);
+            link.textContent = set.name;
+            link.style.color = '#00FF00';
+            link.style.display = 'block';
+            link.style.marginBottom = '10px';
+            terminal.appendChild(link);
+          });
+        })
+        .catch(error => {
+          console.error('Error loading problem sets:', error);
+        });
+    }
+  
+    // Retrieve the URL query parameter 'set'
+    const urlParams = new URLSearchParams(window.location.search);
+    const problemSetFile = urlParams.get('set');
+  
+    // If no problem set is specified, display the selection page.
+    if (!problemSetFile) {
+      displaySelectionPage();
+      return;
+    }
+  
+    // Attempt to fetch the specified problem set.
+    fetch(problemSetFile)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Problem set not found.");
+        }
+        return response.json();
+      })
       .then(problems => {
         let currentProblemIndex = 0;
-        const terminal = document.getElementById('terminal');
-  
+        
         // Display a welcome/intro message.
         const welcomeEl = document.createElement('div');
         welcomeEl.className = 'instructions blue';
         welcomeEl.textContent = 'Welcome to the Network Tools Practice Environment. Type your commands at the prompt. If you need help, type "help".';
         terminal.appendChild(welcomeEl);
-  
-        // Load a problem block.
+        
+        // **loadProblem**: Loads the problem at a given index.
         function loadProblem(index) {
           if (index >= problems.length) {
             const doneDiv = document.createElement('div');
@@ -22,24 +74,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
           }
           const problem = problems[index];
-  
-          // Create a container for the current problem.
           const problemContainer = document.createElement('div');
           problemContainer.className = 'problem-block';
-  
-          // Append instructions (in blue).
+          
           const instructionsEl = document.createElement('div');
           instructionsEl.className = 'instructions blue';
           instructionsEl.textContent = problem.instructions;
           problemContainer.appendChild(instructionsEl);
-  
+          
           terminal.appendChild(problemContainer);
-  
-          // Append a new prompt line for each attempt.
+          
+          // **appendPrompt**: Adds a new inline prompt for user input.
           function appendPrompt() {
             const promptLine = document.createElement('div');
             promptLine.className = 'prompt-line';
-  
+            
             const promptSpan = document.createElement('span');
             promptSpan.className = 'prompt';
             promptSpan.textContent = problem.promptAppearance || 'student@linux:~$';
@@ -47,36 +96,34 @@ document.addEventListener('DOMContentLoaded', () => {
               promptSpan.textContent += ' ';
             }
             promptLine.appendChild(promptSpan);
-  
+            
             const inputField = document.createElement('input');
             inputField.type = 'text';
             inputField.className = 'commandInput';
             inputField.autofocus = true;
             promptLine.appendChild(inputField);
-  
+            
             problemContainer.appendChild(promptLine);
             inputField.focus();
-  
+            
             inputField.addEventListener('keydown', function(e) {
               if (e.key === 'Enter') {
                 e.preventDefault();
                 const userCommand = inputField.value.trim();
                 inputField.disabled = true;
-  
+                
                 if (userCommand === problem.command) {
-                  // Correct command: print output and explanation.
                   const outputEl = document.createElement('div');
                   outputEl.className = 'output green';
                   outputEl.textContent = problem.output;
                   problemContainer.appendChild(outputEl);
-  
+                  
                   setTimeout(() => {
                     const explanationEl = document.createElement('div');
                     explanationEl.className = 'instructions blue';
                     explanationEl.textContent = problem.explanation;
                     problemContainer.appendChild(explanationEl);
-  
-                    // After a delay, add a separator and load the next problem.
+                    
                     setTimeout(() => {
                       const separator = document.createElement('div');
                       separator.className = 'separator';
@@ -86,17 +133,13 @@ document.addEventListener('DOMContentLoaded', () => {
                       loadProblem(currentProblemIndex);
                     }, 3000);
                   }, 1000);
-  
                 } else if (userCommand.toLowerCase() === 'help') {
-                  // If the user types help, show the correct command.
                   const helpEl = document.createElement('div');
                   helpEl.className = 'output green';
                   helpEl.textContent = 'Hint: The correct command is: ' + problem.command;
                   problemContainer.appendChild(helpEl);
                   appendPrompt();
-  
                 } else {
-                  // Unrecognized command: print error and prompt for another attempt.
                   const errorEl = document.createElement('div');
                   errorEl.className = 'output green';
                   errorEl.textContent = 'Command not recognized. Please try again.';
@@ -106,14 +149,14 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             });
           }
-  
           appendPrompt();
         }
-  
+        
         loadProblem(currentProblemIndex);
       })
       .catch(error => {
-        console.error('Error loading problems:', error);
+        console.error('Error loading problem set:', error);
+        displaySelectionPage('Error: The requested problem set does not exist. Please choose a different problem set:');
       });
   });
   

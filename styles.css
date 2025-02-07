@@ -14,20 +14,20 @@ body {
     margin: 0 auto;
   }
   
-  /* **instructions** appear in blue */
+  /* **instructions**: styled in blue to denote guidance */
   .instructions.blue {
     color: #00BFFF;
     margin-bottom: 10px;
   }
   
-  /* **output** is green and preserves whitespace */
+  /* **output**: styled in green and preserves whitespace */
   .output.green {
     color: #00FF00;
     white-space: pre-wrap;
     margin-bottom: 10px;
   }
   
-  /* **prompt-line** displays prompt and input inline */
+  /* **prompt-line**: displays the prompt and input inline */
   .prompt-line {
     display: flex;
     align-items: center;
@@ -48,7 +48,7 @@ body {
     flex: 1;
   }
   
-  /* Separator between problem blocks */
+  /* **separator**: visually divides problem blocks */
   .separator {
     margin: 10px 0;
     color: #00FF00;
