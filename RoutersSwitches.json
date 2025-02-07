@@ -1,0 +1,142 @@
+[
+  {
+    "instructions": "Problem 1: Display the MAC Address Table.\n\nIn this exercise, you will view the switch’s MAC address table, which maps the physical addresses (MAC addresses) of devices to the VLANs and ports they are connected to. This helps you understand how the switch learns and organizes device locations. Type exactly: `show mac-address-table`.",
+    "command": "show mac-address-table",
+    "output": "          Mac Address Table\n-------------------------------------------\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n   1    001a.2b3c.4d5e    Dynamic     Gi0/1\n   1    001a.2b3c.4d5f    Dynamic     Gi0/2\n  10    001a.2b3c.4d60    Dynamic     Gi0/3",
+    "explanation": "The output lists the MAC addresses learned by the switch, along with their associated VLANs and ports. This is essential for troubleshooting connectivity and verifying network segmentation.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 2: Filter the MAC Address Table by VLAN.\n\nSometimes you only need to view devices on a specific VLAN. In this exercise, you will filter the MAC address table to show only entries for VLAN 10. Type exactly: `show mac-address-table vlan 10`.",
+    "command": "show mac-address-table vlan 10",
+    "output": "          Mac Address Table\n-------------------------------------------\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n  10    001a.2b3c.4d60    Dynamic     Gi0/3",
+    "explanation": "By specifying the VLAN number, the command displays only the entries for VLAN 10. This targeted view can help verify device distribution within a specific segment of the network.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 3: Display a Specific MAC Address Entry.\n\nTo locate a particular device on the network, you can filter the MAC address table by a specific MAC address. Type exactly: `show mac-address-table address 001a.2b3c.4d5e`.",
+    "command": "show mac-address-table address 001a.2b3c.4d5e",
+    "output": "Vlan    Mac Address       Type      Ports\n----    -----------       --------  -----\n   1    001a.2b3c.4d5e    Dynamic   Gi0/1",
+    "explanation": "This command filters the MAC address table to show only the entry for the specified MAC address, helping you verify which port and VLAN the device is connected to.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 4: Display the Full Routing Table on a Router.\n\nRouters use routing tables to determine the best path for packet forwarding. In this exercise, view the full routing table by typing exactly: `show route`.",
+    "command": "show route",
+    "output": "Codes: C - connected, S - static, O - OSPF, etc.\n\nGateway of last resort is 192.168.1.1 to network 0.0.0.0\n\nC    192.168.1.0/24 is directly connected, Ethernet0\nS    0.0.0.0/0 [1/0] via 192.168.1.1",
+    "explanation": "The output displays the router’s routing table, listing connected routes (C) and static routes (S). This information is crucial for understanding how traffic is directed through the network.",
+    "promptAppearance": "Router# "
+  },
+  {
+    "instructions": "Problem 5: Filter the Routing Table for a Specific Network.\n\nTo focus on a particular network, filter the routing table. In this exercise, display only the routes that include the network 192.168.1.0 by typing exactly: `show route | include 192.168.1.0`.",
+    "command": "show route | include 192.168.1.0",
+    "output": "C    192.168.1.0/24 is directly connected, Ethernet0",
+    "explanation": "Piping the routing table output to the `include` command filters the display to show only lines containing '192.168.1.0', making it easier to find specific routes.",
+    "promptAppearance": "Router# "
+  },
+  {
+    "instructions": "Problem 6: Display All Interface Details.\n\nInterfaces are the physical or virtual connections on a device. To view detailed information for all interfaces, type exactly: `show interface`.",
+    "command": "show interface",
+    "output": "Interface: Ethernet0/0\n  Description: Uplink to Router\n  Hardware is GigabitEthernet, address is 001a.2b3c.4d5e (bia 001a.2b3c.4d5e)\n  Internet address is 192.168.1.1/24\n  MTU 1500, BW 1000000 Kbit/sec, DLY 10 usec\n\nInterface: Ethernet0/1\n  Description: Downlink to Switch\n  Hardware is GigabitEthernet, address is 001a.2b3c.4d5f (bia 001a.2b3c.4d5f)\n  Internet address is 192.168.2.1/24\n  MTU 1500, BW 1000000 Kbit/sec, DLY 10 usec",
+    "explanation": "This command provides detailed statistics for each interface, including hardware addresses, IP addresses, MTU, bandwidth, and delay values. It is useful for diagnosing interface performance and connectivity issues.",
+    "promptAppearance": "Router# "
+  },
+  {
+    "instructions": "Problem 7: Display Details for a Specific Interface.\n\nTo examine a particular interface, display detailed statistics for that interface only. Type exactly: `show interface GigabitEthernet0/1`.",
+    "command": "show interface GigabitEthernet0/1",
+    "output": "GigabitEthernet0/1 is up, line protocol is up\n  Hardware is GigabitEthernet, address is 001a.2b3c.4d5f\n  Internet address is 192.168.2.1/24\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec\n  1000 packets input, 1500 packets output",
+    "explanation": "This command displays detailed information for GigabitEthernet0/1, including its status, IP address, and packet statistics. It is helpful for focused troubleshooting on a single interface.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 8: Display the Running Configuration of the Device.\n\nThe running configuration shows the current settings of the device. To view this configuration, type exactly: `show config`.",
+    "command": "show config",
+    "output": "Current configuration : 1024 bytes\n!\nversion 15.2\nservice timestamps debug datetime msec\nservice timestamps log datetime msec\n!\ninterface GigabitEthernet0/1\n description Connection to Server\n ip address 192.168.10.1 255.255.255.0\n!\nrouter ospf 1\n network 192.168.10.0 0.0.0.255 area 0\n!\nend",
+    "explanation": "The running configuration displays the active settings on the device, including interface configurations, routing protocols, and other parameters. It is critical for verifying device setup and troubleshooting.",
+    "promptAppearance": "Router# "
+  },
+  {
+    "instructions": "Problem 9: Filter the Configuration for Interface Lines.\n\nTo quickly review which interfaces are configured, filter the running configuration to display only lines that define interfaces. Type exactly: `show config | include interface`.",
+    "command": "show config | include interface",
+    "output": "interface GigabitEthernet0/1\ninterface GigabitEthernet0/2",
+    "explanation": "This command filters the configuration output to show only the lines that contain 'interface', making it easier to identify all interface definitions on the device.",
+    "promptAppearance": "Router# "
+  },
+  {
+    "instructions": "Problem 10: Display the ARP Table on the Device.\n\nThe ARP table shows the mapping between IP addresses and MAC addresses. To view this table, type exactly: `show arp`.",
+    "command": "show arp",
+    "output": "Protocol  Address          Age (min)  Hardware Addr   Type   Interface\nInternet  192.168.10.10    5          001a.2b3c.4d5e  ARPA   GigabitEthernet0/1\nInternet  192.168.10.20    3          001a.2b3c.4d5f  ARPA   GigabitEthernet0/2",
+    "explanation": "This output lists the ARP entries, showing the IP addresses, corresponding MAC addresses, and the interfaces where these mappings were learned. It is important for diagnosing IP-to-MAC resolution issues.",
+    "promptAppearance": "Router# "
+  },
+  {
+    "instructions": "Problem 11: Display the VLAN Configuration on the Switch.\n\nVLANs (Virtual LANs) are used to segment network traffic. To see how VLANs are configured, type exactly: `show vlan`.",
+    "command": "show vlan",
+    "output": "VLAN Name                             Status    Ports\n---- -------------------------------- --------- -------------------------------\n1    default                          active    Gi0/1, Gi0/2, Gi0/3\n10   Sales                            active    Gi0/4, Gi0/5\n20   Engineering                      active    Gi0/6, Gi0/7",
+    "explanation": "The VLAN configuration displays the VLAN IDs, names, statuses, and the ports assigned to each VLAN. This is useful for understanding network segmentation and isolating traffic.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 12: Display a Concise VLAN Summary.\n\nFor a quick overview of VLANs, use a summarized display. Type exactly: `show vlan brief`.",
+    "command": "show vlan brief",
+    "output": "VLAN Name                             Status    Ports\n---- -------------------------------- --------- -------------------------------\n1    default                          active    Gi0/1, Gi0/2, Gi0/3\n10   Sales                            active    Gi0/4, Gi0/5\n20   Engineering                      active    Gi0/6, Gi0/7",
+    "explanation": "The brief version of the VLAN command provides a concise summary of the VLAN settings, making it easier to quickly review key VLAN information.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 13: Display Details for a Specific VLAN.\n\nTo examine the settings for a particular VLAN, type exactly: `show vlan id 10`. This command shows detailed information for VLAN 10.",
+    "command": "show vlan id 10",
+    "output": "VLAN ID: 10\nName: Sales\nStatus: active\nPorts: Gi0/4, Gi0/5",
+    "explanation": "The output provides detailed information for VLAN 10, including its name, status, and the ports that are members of the VLAN. This helps verify that the VLAN is configured correctly.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 14: Display Power Consumption and PoE Status.\n\nPower over Ethernet (PoE) allows switches to supply power to connected devices. To view overall power statistics, type exactly: `show power`.",
+    "command": "show power",
+    "output": "Power Status: On\nTotal Power: 370W\nConsumed Power: 150W\nAvailable Power: 220W\nPort  Power (W)\nGi0/1  15.4\nGi0/2  15.4\nGi0/3  15.4",
+    "explanation": "The output displays the switch’s power budget and the amount of power consumed on each port, which is essential for managing PoE devices and ensuring that the power supply is not exceeded.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 15: Display Detailed PoE Information Per Port.\n\nTo get detailed information on the PoE status of each port, including configured and consumed power, type exactly: `show power inline`.",
+    "command": "show power inline",
+    "output": "Interface        Admin  Oper  Power   Device              Class\n---------------- ----- ----- ------- ------------------- -----\nGi0/1            auto   on    15.4    IP Phone 7911      2\nGi0/2            auto   on    15.4    Wireless AP         3\nGi0/3            auto   on    15.4    Access Point        3",
+    "explanation": "This command displays per-port PoE details, showing the power settings, operational status, and power consumption of each port. It is vital for ensuring that connected devices receive adequate power.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 16: Display Interface Statistics with Error Counts.\n\nInterfaces provide critical information on data flow and errors. To display detailed statistics, including error counts, for a specific interface, type exactly: `show interface GigabitEthernet0/0`.",
+    "command": "show interface GigabitEthernet0/0",
+    "output": "GigabitEthernet0/0 is up, line protocol is up\n  Hardware is Gigabit Ethernet, address is 001a.2b3c.4d5e\n  Internet address is 10.0.0.1/24\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec\n     1000 packets input, 800000 bytes, 0 input errors\n     1500 packets output, 1200000 bytes, 0 output errors",
+    "explanation": "The command provides detailed statistics for GigabitEthernet0/0, including the number of packets transmitted and received, as well as any error counts. This information is essential for troubleshooting interface performance issues.",
+    "promptAppearance": "Router# "
+  },
+  {
+    "instructions": "Problem 17: Filter the Routing Table for a Specific Network.\n\nTo narrow down the routing table to a specific network, type exactly: `show route 10.0.0.0`. This command displays routing information for the network 10.0.0.0/24.",
+    "command": "show route 10.0.0.0",
+    "output": "O    10.0.0.0/24 [110/2] via 192.168.1.1, 00:00:12, GigabitEthernet0/0",
+    "explanation": "The output shows the route for the network 10.0.0.0/24, including the routing protocol (OSPF in this case), the next-hop IP, and the associated interface. This task reinforces filtering techniques in routing displays.",
+    "promptAppearance": "Router# "
+  },
+  {
+    "instructions": "Problem 18: Filter the Running Configuration for VLAN Lines.\n\nTo quickly identify VLAN-related configuration lines, type exactly: `show config | include vlan`. This filters the running configuration to display only lines containing the word 'vlan'.",
+    "command": "show config | include vlan",
+    "output": "vlan 1\nvlan 10\nvlan 20",
+    "explanation": "Filtering the configuration output to include only 'vlan' lines helps you verify which VLANs are configured on the device. It is a simple method for reviewing relevant parts of the configuration.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 19: Display the MAC Address Table in Default Order.\n\nTo view the MAC address table in its default sorted order (typically by VLAN), type exactly: `show mac-address-table`.",
+    "command": "show mac-address-table",
+    "output": "          Mac Address Table\n-------------------------------------------\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n   1    001a.2b3c.4d5e    Dynamic     Gi0/1\n   1    001a.2b3c.4d5f    Dynamic     Gi0/2\n  10    001a.2b3c.4d60    Dynamic     Gi0/3",
+    "explanation": "This command displays the MAC address table in its default order, which helps you review how the switch organizes MAC addresses by VLAN and port.",
+    "promptAppearance": "Switch# "
+  },
+  {
+    "instructions": "Problem 20: Display a Summary of PoE Power Consumption.\n\nFor a quick overview of the PoE power budget on your switch, type exactly: `show power inline summary`. This command provides a concise summary of total available, consumed, and average power per port.",
+    "command": "show power inline summary",
+    "output": "Total Power Available : 370W\nTotal Power Consumed  : 90W\nAverage Power per Port: 15.0W",
+    "explanation": "The summary output gives you a high-level view of the switch's PoE power status, which is useful for monitoring power allocation and ensuring that your power budget is not exceeded.",
+    "promptAppearance": "Switch# "
+  }
+]

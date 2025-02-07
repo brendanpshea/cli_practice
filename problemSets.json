@@ -10,6 +10,10 @@
     {
         "name": "Dig, Arp, and Ipconfig",
         "file": "DigArpIp.json"
+    },
+    { 
+        "name": "Routers and Switches",
+        "file": "RoutersSwitches.json"
     }
   ]
   
