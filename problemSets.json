@@ -1,11 +1,15 @@
     [
     {
-      "name": "Network Tools",
-      "file": "problems.json"
+      "name": "Ping, Traceroute, and Netstat",
+      "file": "PingTraceNetStat.json"
     },
     {
-      "name": "tcdump basics",
+      "name": "tcdump Basics",
       "file": "tcpdump.json"
+    },
+    {
+        "name": "Dig, Arp, and Ipconfig",
+        "file": "DigArpIp.json"
     }
   ]
   

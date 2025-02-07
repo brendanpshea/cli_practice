@@ -1,0 +1,144 @@
+[
+    {
+      "instructions": "Problem 1: Basic **dig** Query for A Record.\n\nType exactly: `dig www.example.com A`. This command queries the **A record** for www.example.com, mapping the hostname to its IPv4 address.",
+      "command": "dig www.example.com A",
+      "output": "; <<>> DiG 9.11.3-1ubuntu1.13-Ubuntu <<>> www.example.com A\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12345\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n;; QUESTION SECTION:\n;www.example.com.               IN      A\n;; ANSWER SECTION:\nwww.example.com.        3600    IN      A       93.184.216.34\n;; Query time: 20 msec\n;; SERVER: 192.168.1.1#53(192.168.1.1)\n;; WHEN: Thu Feb 06 2025 15:00:00 GMT\n;; MSG SIZE  rcvd: 85",
+      "explanation": "The output confirms the **A record** for www.example.com. The **ANSWER SECTION** shows the IPv4 address (93.184.216.34) along with a TTL of 3600 seconds.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 2: **dig** Query for MX Record.\n\nType exactly: `dig gmail.com MX`. This command queries the **MX record** for gmail.com to list the mail servers responsible for handling its email.",
+      "command": "dig gmail.com MX",
+      "output": "; <<>> DiG 9.11.3-1ubuntu1.13-Ubuntu <<>> gmail.com MX\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 67890\n;; flags: qr rd ra; QUERY: 1, ANSWER: 5, AUTHORITY: 0, ADDITIONAL: 1\n;; QUESTION SECTION:\n;gmail.com.                   IN      MX\n;; ANSWER SECTION:\ngmail.com.            3600    IN      MX      10 alt1.gmail-smtp-in.l.google.com.\ngmail.com.            3600    IN      MX      20 alt2.gmail-smtp-in.l.google.com.\ngmail.com.            3600    IN      MX      30 alt3.gmail-smtp-in.l.google.com.\ngmail.com.            3600    IN      MX      40 alt4.gmail-smtp-in.l.google.com.\ngmail.com.            3600    IN      MX      50 gmail-smtp-in.l.google.com.\n;; Query time: 35 msec\n;; SERVER: 192.168.1.1#53(192.168.1.1)\n;; WHEN: Thu Feb 06 2025 15:02:00 GMT\n;; MSG SIZE  rcvd: 220",
+      "explanation": "The output lists the **MX records** for gmail.com with their respective priorities. Lower numerical values indicate higher priority for email delivery.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 3: **dig** with +short Option.\n\nType exactly: `dig www.google.com A +short`. This command uses the **+short** option to return only the essential IPv4 address for www.google.com.",
+      "command": "dig www.google.com A +short",
+      "output": "172.217.5.110",
+      "explanation": "The **+short** flag simplifies the output to just the IPv4 address of www.google.com, making it easy to read and use in scripts.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 4: **dig** Query for AAAA Record.\n\nType exactly: `dig www.google.com AAAA`. This command queries the **AAAA record** to retrieve the IPv6 address of www.google.com.",
+      "command": "dig www.google.com AAAA",
+      "output": "; <<>> DiG 9.11.3-1ubuntu1.13-Ubuntu <<>> www.google.com AAAA\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13579\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n;; QUESTION SECTION:\n;www.google.com.              IN      AAAA\n;; ANSWER SECTION:\nwww.google.com.       300     IN      AAAA    2607:f8b0:400a:809::200e\n;; Query time: 25 msec\n;; SERVER: 192.168.1.1#53(192.168.1.1)\n;; WHEN: Thu Feb 06 2025 15:03:00 GMT\n;; MSG SIZE  rcvd: 98",
+      "explanation": "The **AAAA record** output displays the IPv6 address for www.google.com, confirming modern IP addressing support.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 5: Reverse DNS Lookup with **dig**.\n\nType exactly: `dig -x 8.8.8.8`. This command performs a reverse DNS lookup on the IP address 8.8.8.8, converting it to its associated hostname.",
+      "command": "dig -x 8.8.8.8",
+      "output": "; <<>> DiG 9.11.3-1ubuntu1.13-Ubuntu <<>> -x 8.8.8.8\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 24680\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n;; QUESTION SECTION:\n;8.8.8.8.in-addr.arpa.         IN      PTR\n;; ANSWER SECTION:\n8.8.8.8.in-addr.arpa.  86400   IN      PTR     dns.google.\n;; Query time: 22 msec\n;; SERVER: 192.168.1.1#53(192.168.1.1)\n;; WHEN: Thu Feb 06 2025 15:04:00 GMT\n;; MSG SIZE  rcvd: 100",
+      "explanation": "The **-x** option performs a reverse lookup, converting 8.8.8.8 into its corresponding hostname (dns.google).",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 6: Display the ARP Table.\n\nType exactly: `arp -a`. This command displays the current ARP table, which maps IP addresses to their corresponding **MAC addresses**.",
+      "command": "arp -a",
+      "output": "? (192.168.1.1) at 00:1a:2b:3c:4d:5e [ether] on eth0\n? (192.168.1.100) at 00:1a:2b:3c:4d:5f [ether] on eth0",
+      "explanation": "The output shows the ARP table, which is crucial for resolving network layer addresses to link layer (MAC) addresses.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 7: Add a Static ARP Entry.\n\nType exactly: `arp -s 192.168.1.200 00:11:22:33:44:55`. This command adds a static ARP entry binding the IP 192.168.1.200 to the MAC address 00:11:22:33:44:55 on interface eth0.",
+      "command": "arp -s 192.168.1.200 00:11:22:33:44:55",
+      "output": "ARP entry for 192.168.1.200 added",
+      "explanation": "This static entry ensures that the mapping between the specified IP and MAC address remains constant, which is useful for network stability.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 8: Delete a Static ARP Entry.\n\nType exactly: `arp -d 192.168.1.200`. This command removes the static ARP entry for IP 192.168.1.200.",
+      "command": "arp -d 192.168.1.200",
+      "output": "ARP entry for 192.168.1.200 deleted",
+      "explanation": "Deleting the static ARP entry allows the system to revert to dynamic ARP resolution for that IP address.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 9: Display IP Address Configuration with **ip**.\n\nType exactly: `ip addr show`. This command displays detailed IP address information for all network interfaces.",
+      "command": "ip addr show",
+      "output": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default \n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default \n    link/ether 00:1a:2b:3c:4d:5e brd ff:ff:ff:ff:ff:ff\n    inet 192.168.1.101/24 brd 192.168.1.255 scope global eth0\n       valid_lft forever preferred_lft forever",
+      "explanation": "The output provides a complete overview of each interface, including IP addresses and their status, which is essential for network troubleshooting.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 10: Display the Routing Table with **ip**.\n\nType exactly: `ip route show`. This command displays the system's routing table, showing how packets are directed.",
+      "command": "ip route show",
+      "output": "default via 192.168.1.1 dev eth0 \n192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.101",
+      "explanation": "The routing table output reveals the default route for external traffic and specific routes for local networks.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 11: Display Network Interfaces with **ifconfig**.\n\nType exactly: `ifconfig`. This command shows detailed configurations and statistics for all network interfaces.",
+      "command": "ifconfig",
+      "output": "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 192.168.1.101  netmask 255.255.255.0  broadcast 192.168.1.255\n        inet6 fe80::21a:2bff:fe3c:4d5e  prefixlen 64  scopeid 0x20<link>\n        ether 00:1a:2b:3c:4d:5e  txqueuelen 1000  (Ethernet)\n        RX packets 12345  bytes 1234567 (1.2 MB)\n        TX packets 6789  bytes 987654 (987.6 KB)\nlo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536\n        inet 127.0.0.1  netmask 255.0.0.0",
+      "explanation": "The **ifconfig** output provides details such as IP address, netmask, and traffic statistics, which help in diagnosing network issues.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 12: Display IP Configuration on Windows with **ipconfig**.\n\nType exactly: `ipconfig` on a Windows system. This command displays the network configuration details like IP address, subnet mask, and default gateway.",
+      "command": "ipconfig",
+      "output": "Windows IP Configuration\n\nEthernet adapter Ethernet:\n\n   Connection-specific DNS Suffix  . : example.local\n   IPv4 Address. . . . . . . . . . . : 192.168.1.101\n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : 192.168.1.1",
+      "explanation": "The **ipconfig** command on Windows provides similar network details as ifconfig on Linux, making it crucial for troubleshooting on Windows systems.",
+      "promptAppearance": "student@windows:~$"
+    },
+    {
+      "instructions": "Problem 13: Display Interface Statistics with **ip**.\n\nType exactly: `ip -s link`. This command shows detailed statistics for each network interface, including packet counts and error metrics.",
+      "command": "ip -s link",
+      "output": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes  packets  errors  dropped overrun mcast\n         1234567   12345   0       0       0       0\n    TX:  bytes  packets  errors  dropped carrier collsns\n         1234567   12345   0       0       0       0\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000\n    link/ether 00:1a:2b:3c:4d:5e brd ff:ff:ff:ff:ff:ff\n    RX:  bytes  packets  errors  dropped overrun mcast\n         9876543   67890   0       0       0       0\n    TX:  bytes  packets  errors  dropped carrier collsns\n         8765432   56789   0       0       0       0",
+      "explanation": "This output provides a detailed view of data transmitted and received on each interface, including error statistics, which are valuable for network troubleshooting.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 14: Bring Up a Network Interface with **ifconfig**.\n\nType exactly: `ifconfig eth0 up`. This command enables the network interface eth0.",
+      "command": "ifconfig eth0 up",
+      "output": "Interface eth0 enabled",
+      "explanation": "Enabling an interface with **ifconfig eth0 up** activates it, which is a common step when troubleshooting connectivity issues.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 15: Assign a New IP Address with **ip**.\n\nType exactly: `ip addr add 192.168.1.150/24 dev eth0`. This command assigns the IP address 192.168.1.150 with a subnet mask of /24 to the interface eth0.",
+      "command": "ip addr add 192.168.1.150/24 dev eth0",
+      "output": "IP address 192.168.1.150/24 added to eth0",
+      "explanation": "This command reconfigures the network interface by adding a new IP address, which is useful for testing and network reconfiguration.",
+      "promptAppearance": "student@linux:~$"
+    },
+        {
+          "instructions": "Problem 16: Retrieve the TXT Record for example.org using dig.\n\nConstruct a command that queries for the TXT record of example.org. Your command should include the domain name (example.org) and specify the record type as TXT (without using output-shortening options). Type exactly: `dig example.org TXT`.",
+          "command": "dig example.org TXT",
+          "output": "; <<>> DiG 9.11.3 <<>> example.org TXT\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 54321\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n;; QUESTION SECTION:\n;example.org.                   IN      TXT\n;; ANSWER SECTION:\nexample.org.            3600    IN      TXT     \"v=spf1 -all\"\n;; Query time: 30 msec\n;; SERVER: 192.168.1.1#53(192.168.1.1)\n;; WHEN: Thu Feb 06 2025 15:05:00 GMT\n;; MSG SIZE  rcvd: 100",
+          "explanation": "This command confirms the existence of a TXT record for example.org. The ANSWER SECTION shows the text data (an SPF record) along with a TTL of 3600 seconds. This reinforces your ability to query non-standard DNS records by specifying the record type explicitly.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 17: Display the ARP Table with Numeric Output.\n\nConstruct a command that displays the ARP table without performing hostname resolution. Use the appropriate option to force numeric output. Type exactly: `arp -n`.",
+          "command": "arp -n",
+          "output": "Address                  HWtype  HWaddress           Flags Mask            Iface\n192.168.1.1              ether   00:1a:2b:3c:4d:5e   C                     eth0\n192.168.1.100            ether   00:1a:2b:3c:4d:5f   C                     eth0",
+          "explanation": "By using the '-n' option, the ARP table is displayed with numeric IP addresses, skipping hostname resolution. This is a simpler variant of the basic ARP display and reinforces your understanding of modifying command output.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 18: Show Detailed Interface Information for eth0 using ip.\n\nConstruct a command that displays detailed information for the network interface eth0. Ensure you include the sub-command to show addresses and specify the interface. Type exactly: `ip addr show dev eth0`.",
+          "command": "ip addr show dev eth0",
+          "output": "2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000\n    link/ether 00:1a:2b:3c:4d:5e brd ff:ff:ff:ff:ff:ff\n    inet 192.168.1.101/24 brd 192.168.1.255 scope global eth0\n       valid_lft forever preferred_lft forever",
+          "explanation": "This command displays the full configuration details for eth0, including its MAC address and IPv4 address with subnet information. It is directly parallel to earlier tasks that showed interface details.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 19: Bring Down the Network Interface eth0 using ifconfig.\n\nConstruct a command that disables the network interface eth0. This is a simple inverse of the command used to bring the interface up. Type exactly: `ifconfig eth0 down`.",
+          "command": "ifconfig eth0 down",
+          "output": "Interface eth0 disabled",
+          "explanation": "This command disables the network interface eth0. It is a straightforward task, directly parallel to the command to bring the interface up, and helps you understand how to manage interface states using ifconfig.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 20: Display the ARP Table on a Windows System using arp.\n\nOn a Windows system, construct a command that displays the ARP table. Use the standard arp command with its option to display all entries. Type exactly: `arp -a`.",
+          "command": "arp -a",
+          "output": "Interface: 192.168.1.101 --- 0x3\n  Internet Address      Physical Address      Type\n  192.168.1.1           00-1a-2b-3c-4d-5e     dynamic\n  192.168.1.100         00-1a-2b-3c-4d-5f     dynamic",
+          "explanation": "This command displays the ARP table on a Windows system, listing IP addresses, their corresponding physical (MAC) addresses, and the entry type. It parallels the ARP display task on Linux and reinforces cross-platform command usage.",
+          "promptAppearance": "student@windows:~$"
+        }
+                
+  ]
+  

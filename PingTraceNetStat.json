@@ -1,0 +1,144 @@
+[
+    {
+      "instructions": "Problem 1: Basic **ping** Command.\n\nThe **ping** command sends **ICMP echo requests** to test network connectivity. The basic syntax is: **ping <destination>**. Type: `ping 8.8.8.8`.\n\nThis command sends packets to Google's DNS server (8.8.8.8) to verify connectivity. If you need a hint, type 'help'.",
+      "command": "ping 8.8.8.8",
+      "output": "PING 8.8.8.8 (8.8.8.8): 56 data bytes\n64 bytes from 8.8.8.8: icmp_seq=0 ttl=117 time=12.3 ms\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=117 time=12.1 ms\n--- 8.8.8.8 ping statistics ---\n2 packets transmitted, 2 packets received, 0% packet loss",
+      "explanation": "The output confirms that your system sent ICMP echo requests to 8.8.8.8 and received replies. The **ttl** value indicates the remaining hops, and **time** is the round-trip delay.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 2: **ping** with Count Option.\n\nThe **-c** option specifies the number of packets to send. Type: `ping -c 4 8.8.4.4`.\n\nThis command sends exactly 4 packets to the destination (8.8.4.4), which is Google's alternate DNS server.",
+      "command": "ping -c 4 8.8.4.4",
+      "output": "PING 8.8.4.4 (8.8.4.4): 56 data bytes\n64 bytes from 8.8.4.4: icmp_seq=1 ttl=117 time=11.9 ms\n64 bytes from 8.8.4.4: icmp_seq=2 ttl=117 time=12.2 ms\n64 bytes from 8.8.4.4: icmp_seq=3 ttl=117 time=12.0 ms\n64 bytes from 8.8.4.4: icmp_seq=4 ttl=117 time=11.8 ms\n--- 8.8.4.4 ping statistics ---\n4 packets transmitted, 4 packets received, 0% packet loss",
+      "explanation": "The output demonstrates that the **-c 4** option limited the transmission to 4 packets. All packets were successfully received, indicating stable connectivity.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 3: **ping** with Interval Option.\n\nThe **-i** option sets the interval between each packet sent. Try: `ping -i 2 8.8.8.8`.\n\nThis command pings the destination every 2 seconds, which can be useful for monitoring longer-term connectivity without overwhelming the network.",
+      "command": "ping -i 2 8.8.8.8",
+      "output": "PING 8.8.8.8 (8.8.8.8): 56 data bytes\n64 bytes from 8.8.8.8: icmp_seq=0 ttl=117 time=12.4 ms\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=117 time=12.2 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=117 time=12.3 ms\n--- 8.8.8.8 ping statistics ---\n3 packets transmitted, 3 packets received, 0% packet loss",
+      "explanation": "The output shows that the packets were sent at 2-second intervals. This pacing option helps manage network load during testing.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 4: **ping** with Packet Size Option.\n\nThe **-s** option sets the number of data bytes to be sent. Type: `ping -s 100 8.8.8.8`.\n\nThis command sends packets with 100 data bytes instead of the default size. Larger packets can reveal issues related to MTU (Maximum Transmission Unit) settings.",
+      "command": "ping -s 100 8.8.8.8",
+      "output": "PING 8.8.8.8 (8.8.8.8): 100 data bytes\n164 bytes from 8.8.8.8: icmp_seq=0 ttl=117 time=12.5 ms\n164 bytes from 8.8.8.8: icmp_seq=1 ttl=117 time=12.7 ms\n--- 8.8.8.8 ping statistics ---\n2 packets transmitted, 2 packets received, 0% packet loss",
+      "explanation": "The output confirms that packets with 100 data bytes were sent and received. This test can help diagnose issues with larger payloads.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 5: **ping** an Unreachable Host.\n\nHosts reserved for documentation (like 192.0.2.1) are often unreachable. Type: `ping 192.0.2.1`.\n\nThis command simulates a scenario where no response is received, helping you understand how packet loss is reported.",
+      "command": "ping 192.0.2.1",
+      "output": "PING 192.0.2.1 (192.0.2.1): 56 data bytes\nRequest timeout for icmp_seq 0\nRequest timeout for icmp_seq 1\n--- 192.0.2.1 ping statistics ---\n2 packets transmitted, 0 packets received, 100% packet loss",
+      "explanation": "The output indicates that the host is unreachable, with 100% packet loss. This is useful for learning how network failures are reported.",
+      "promptAppearance": "student@linux:~$"
+    },
+        {
+          "instructions": "Problem 6: Basic **traceroute** Command.\n\nThe **traceroute** command maps the route taken by packets to a destination. Type: `traceroute www.example.com`.",
+          "command": "traceroute www.example.com",
+          "output": "traceroute to www.example.com (93.184.216.34), 30 hops max, 60 byte packets\n 1  router1.example.net (192.168.1.1)  1.123 ms  0.987 ms  1.234 ms\n 2  core1.isp.com (10.1.2.3)  10.456 ms  10.789 ms  10.234 ms\n 3  gateway.isp.com (10.1.2.1)  15.678 ms  15.345 ms  15.987 ms\n 4  www.example.com (93.184.216.34)  20.123 ms  20.456 ms  20.789 ms",
+          "explanation": "This output shows a successful traceroute with **name resolution**. Each hop displays both the hostname and its corresponding IP address. The increasing latency reflects the packet’s progression from the local network toward the destination.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 7: **traceroute** with Numeric Output.\n\nUsing the **-n** option prevents hostname resolution, showing only IP addresses. Type: `traceroute -n 93.184.216.34`.",
+          "command": "traceroute -n 93.184.216.34",
+          "output": "traceroute to 93.184.216.34, 30 hops max, 60 byte packets\n 1  192.168.1.1  1.123 ms  0.987 ms  1.234 ms\n 2  10.0.0.1     10.456 ms  10.789 ms  10.234 ms\n 3  172.16.0.1   15.678 ms  15.345 ms  15.987 ms\n 4  203.0.113.5  20.123 ms  20.456 ms  20.789 ms\n 5  93.184.216.34  25.123 ms  25.456 ms  25.789 ms",
+          "explanation": "The **-n** flag forces **traceroute** to display only numeric IP addresses, eliminating hostname resolution. This streamlined output helps quickly identify each hop by its IP address and highlights the gradual increase in latency along the route.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 8: **traceroute** with a Timeout.\n\nIn some cases, routers may not respond, resulting in timeouts. Type: `traceroute www.unreachable.com`.",
+          "command": "traceroute www.unreachable.com",
+          "output": "traceroute to www.unreachable.com (198.51.100.25), 30 hops max, 60 byte packets\n 1  router1.example.net (192.168.1.1)  1.123 ms  1.045 ms  1.011 ms\n 2  gateway.isp.com (10.0.0.1)  10.234 ms  10.456 ms  10.789 ms\n 3  203.0.113.1 (203.0.113.1)  15.678 ms  15.345 ms  15.987 ms\n 4  * * *\n 5  * * *\n 6  * * *\ntraceroute: www.unreachable.com: Destination unreachable.",
+          "explanation": "This output illustrates a scenario where responses from certain hops time out. Although the first three hops respond normally, hops 4 through 6 show asterisks, indicating no response. The final message clearly states that the destination is unreachable, which is critical for diagnosing network connectivity issues.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 9: **traceroute** to a Distant Destination.\n\nType: `traceroute www.google.com`.\n\nThis command maps the route to www.google.com, potentially involving many hops and varying response times.",
+          "command": "traceroute www.google.com",
+          "output": "traceroute to www.google.com (172.217.5.110), 30 hops max, 60 byte packets\n 1  router1.home (192.168.0.1)  1.123 ms  1.045 ms  1.011 ms\n 2  isp-gateway.example.net (10.10.10.1)  5.234 ms  5.456 ms  5.789 ms\n 3  core-router.isp.com (10.10.20.1)  12.345 ms  12.678 ms  12.901 ms\n 4  edge-router1.isp.com (10.10.30.1)  20.123 ms  20.456 ms  20.789 ms\n 5  172.16.0.1 (172.16.0.1)  30.123 ms  30.456 ms  30.789 ms\n 6  172.16.1.1 (172.16.1.1)  40.123 ms  40.456 ms  40.789 ms\n 7  www.google.com (172.217.5.110)  50.123 ms  50.456 ms  50.789 ms",
+          "explanation": "This traceroute output to a distant destination shows multiple intermediary hops with gradually increasing response times. Both hostnames and IP addresses are resolved, giving a clear picture of the network path and the potential delays encountered along the route.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 10: **traceroute** with Maximum Hops Limit.\n\nThe **-m** option sets the maximum number of hops to probe. Type: `traceroute -m 10 www.example.com`.",
+          "command": "traceroute -m 10 www.example.com",
+          "output": "traceroute to www.example.com (93.184.216.34), 10 hops max, 60 byte packets\n 1  router1.example.net (192.168.1.1)  1.123 ms  1.045 ms  1.011 ms\n 2  core1.isp.com (10.1.2.3)  10.456 ms  10.789 ms  10.234 ms\n 3  gateway.isp.com (10.1.2.1)  15.678 ms  15.345 ms  15.987 ms\n 4  mid-router.example.net (192.0.2.1)  20.123 ms  20.456 ms  20.789 ms\n 5  mid-router2.example.net (192.0.2.2)  25.123 ms  25.456 ms  25.789 ms\n 6  upstream-router.example.net (192.0.2.3)  30.123 ms  30.456 ms  30.789 ms\n 7  transit-router.example.net (192.0.2.4)  35.123 ms  35.456 ms  35.789 ms\n 8  edge-router.example.net (192.0.2.5)  40.123 ms  40.456 ms  40.789 ms\n 9  core-router.example.net (192.0.2.6)  45.123 ms  45.456 ms  45.789 ms\n10  www.example.com (93.184.216.34)  50.123 ms  50.456 ms  50.789 ms",
+          "explanation": "By using **-m 10**, the traceroute command limits the probe to a maximum of 10 hops. The output shows only the first 10 hops along the path to www.example.com, which is helpful for focusing on the early segments of the route or when the full path is excessively long.",
+          "promptAppearance": "student@linux:~$"
+        },      
+            {
+              "instructions": "Problem 11: Basic **netstat** Usage.\n\nUse **netstat** to list active network connections. Type: `netstat`.",
+              "command": "netstat",
+              "output": "Active Internet connections (w/o servers)\nProto Recv-Q Send-Q Local Address           Foreign Address         State\ntcp        0      0 localhost:3306          localhost:5432          ESTABLISHED\ntcp6       0      0 [::]:80                 [::]:*                  LISTEN",
+              "explanation": "This output displays active network connections. The **ESTABLISHED** state indicates a live session between two endpoints, while **LISTEN** denotes a service waiting for incoming connections. **Proto** identifies the protocol (e.g., TCP), and the address columns specify the local and remote endpoints.",
+              "promptAppearance": "student@linux:~$"
+            },
+            {
+              "instructions": "Problem 12: **netstat** with the **-a** Option.\n\nUse **netstat -a** to display all connections, including those in a listening state. Type: `netstat -a`.",
+              "command": "netstat -a",
+              "output": "Active Internet connections (servers and established)\nProto Recv-Q Send-Q Local Address           Foreign Address         State\ntcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN\ntcp        0      0 localhost:5432          localhost:53210         ESTABLISHED\nudp        0      0 0.0.0.0:68              0.0.0.0:*",
+              "explanation": "The **-a** flag makes **netstat** list all network sockets. In this output, the **LISTEN** state shows services waiting for connections (e.g., on port 22), while **ESTABLISHED** indicates active communications. The UDP entry demonstrates a connectionless protocol that does not maintain a persistent session.",
+              "promptAppearance": "student@linux:~$"
+            },
+            {
+              "instructions": "Problem 13: **netstat** with **-tuln** Options.\n\nCombine **-t** (TCP), **-u** (UDP), **-l** (listening), and **-n** (numeric) options to display only listening sockets with numeric addresses. Type: `netstat -tuln`.",
+              "command": "netstat -tuln",
+              "output": "Proto Recv-Q Send-Q Local Address           Foreign Address         State\ntcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN\ntcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN\nudp        0      0 0.0.0.0:68              0.0.0.0:*\ntcp6       0      0 :::443                  :::*                    LISTEN\nudp6       0      0 :::123                  :::*",
+              "explanation": "The **-tuln** combination restricts the display to only **listening** sockets for both TCP and UDP protocols, with numeric output to avoid DNS lookups. This concise output is useful for quickly identifying open ports and the associated protocols.",
+              "promptAppearance": "student@linux:~$"
+            },
+            {
+              "instructions": "Problem 14: Display the Routing Table with **netstat**.\n\nUse **netstat -r** to show the system's routing table. Type: `netstat -r`.",
+              "command": "netstat -r",
+              "output": "Kernel IP routing table\nDestination     Gateway         Genmask         Flags   MSS Window  irtt Iface\n0.0.0.0         192.168.1.1     0.0.0.0         UG        0 0          0 eth0\n192.168.1.0     0.0.0.0         255.255.255.0   U         0 0          0 eth0",
+              "explanation": "The **-r** option displays the **routing table**, which maps how network packets are forwarded. **Destination** shows the target network, **Gateway** indicates the intermediary route, and **Flags** such as **UG** (Up, Gateway) reveal the properties of each route. This table is essential for understanding how data is routed through the network.",
+              "promptAppearance": "student@linux:~$"
+            },
+            {
+              "instructions": "Problem 15: Network Interface Statistics with **netstat**.\n\nRun **netstat -i** to display statistics for network interfaces. Type: `netstat -i`.",
+              "command": "netstat -i",
+              "output": "Kernel Interface table\nIface      MTU   RX-OK RX-ERR RX-DRP RX-OVR  TX-OK TX-ERR TX-DRP TX-OVR Flg\neth0       1500  15432  0      3      0       14250  0      1      0      BMRU\nlo         65536  23456  0      0      0       23456  0      0      0      LRU",
+              "explanation": "The **-i** option provides detailed statistics for each network **interface**. **MTU** (Maximum Transmission Unit) represents the largest packet size allowed, while counters like **RX-OK** and **TX-OK** indicate successful receptions and transmissions. Error counters (**RX-ERR**, **TX-ERR**) and drop counts help diagnose network issues by revealing packet losses or transmission problems.",
+              "promptAppearance": "student@linux:~$"
+            },
+                  {
+          "instructions": "Problem 16: Construct a **ping** Command with Count and Interval.\n\nConstruct a **ping** command that sends exactly 5 **ICMP echo requests** to the destination 1.1.1.1 with a 1-second interval between each packet. Combine the appropriate options to set both the count and the interval.",
+          "command": "ping -c 5 -i 1 1.1.1.1",
+          "output": "PING 1.1.1.1 (1.1.1.1): 56 data bytes\n64 bytes from 1.1.1.1: icmp_seq=0 ttl=57 time=20.1 ms\n64 bytes from 1.1.1.1: icmp_seq=1 ttl=57 time=20.3 ms\n64 bytes from 1.1.1.1: icmp_seq=2 ttl=57 time=20.2 ms\n64 bytes from 1.1.1.1: icmp_seq=3 ttl=57 time=20.4 ms\n64 bytes from 1.1.1.1: icmp_seq=4 ttl=57 time=20.2 ms\n--- 1.1.1.1 ping statistics ---\n5 packets transmitted, 5 packets received, 0% packet loss",
+          "explanation": "The command uses **-c 5** to send 5 packets and **-i 1** to set a 1-second interval between packets. This ensures that 5 pings are sent to 1.1.1.1, with each separated by a precise delay.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 17: Construct a **traceroute** Command with Numeric Output and Hop Limit.\n\nDevise a **traceroute** command to trace the route to www.example.org that displays only numeric IP addresses and limits the maximum number of hops to 8. Combine the necessary options to fulfill these requirements.",
+          "command": "traceroute -n -m 8 www.example.org",
+          "output": "traceroute to www.example.org (93.184.216.34), 8 hops max, 60 byte packets\n 1  192.168.1.1  1.123 ms  1.045 ms  1.011 ms\n 2  10.0.0.1     10.234 ms  10.456 ms  10.789 ms\n 3  172.16.0.1   15.678 ms  15.345 ms  15.987 ms\n 4  93.184.216.34 20.123 ms  20.456 ms  20.789 ms",
+          "explanation": "The **-n** option forces **traceroute** to display numeric IP addresses, while **-m 8** limits the probe to 8 hops. This combination allows a concise and controlled trace to www.example.org.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 18: Construct a **ping** Command with Custom Packet Size.\n\nConstruct a **ping** command that sends ICMP echo requests to www.google.com using a custom data packet size of 120 bytes. Identify and use the appropriate flag to adjust the packet size.",
+          "command": "ping -s 120 www.google.com",
+          "output": "PING www.google.com (172.217.3.110): 120 data bytes\n64 bytes from 172.217.3.110: icmp_seq=0 ttl=57 time=20.4 ms\n64 bytes from 172.217.3.110: icmp_seq=1 ttl=57 time=20.6 ms\n64 bytes from 172.217.3.110: icmp_seq=2 ttl=57 time=20.5 ms\n--- www.google.com ping statistics ---\n3 packets transmitted, 3 packets received, 0% packet loss",
+          "explanation": "The **-s 120** flag specifies that each packet should carry 120 data bytes instead of the default size. This command tests how the network handles larger-than-default payloads while pinging www.google.com.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 19: Construct a **netstat** Command to Filter TCP Connections on Port 80.\n\nConstruct a **netstat** command that lists only active TCP connections involving port 80. Combine **netstat** with a filtering tool to display only the lines that contain ':80'.",
+          "command": "netstat -tn | grep ':80'",
+          "output": "tcp        0      0 192.168.1.100:52344   93.184.216.34:80      ESTABLISHED\ntcp6       0      0 :::80                 :::*                  LISTEN",
+          "explanation": "Here, **-t** limits the output to TCP connections and **-n** ensures numeric output. The pipe to **grep ':80'** filters the results so that only connections involving port 80 are displayed.",
+          "promptAppearance": "student@linux:~$"
+        },
+        {
+          "instructions": "Problem 20: Construct a **traceroute** Command with a Custom Wait Time.\n\nConstruct a **traceroute** command to trace the route to 8.8.8.8 with a 2-second wait time between probes. Identify and use the appropriate option to set this custom wait time.",
+          "command": "traceroute -w 2 8.8.8.8",
+          "output": "traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets\n 1  192.168.1.1  1.123 ms  1.045 ms  1.011 ms\n 2  10.0.0.1     10.234 ms  10.456 ms  10.789 ms\n 3  172.16.0.1   15.678 ms  15.345 ms  15.987 ms\n 4  8.8.8.8      20.123 ms  20.456 ms  20.789 ms",
+          "explanation": "The **-w 2** flag sets a 2-second wait time for each probe in the **traceroute** command. This ensures that each packet has a consistent delay, which can be useful for networks with variable response times.",
+          "promptAppearance": "student@linux:~$"
+        }
+      
+  ]
+  
