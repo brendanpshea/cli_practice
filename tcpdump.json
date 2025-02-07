@@ -1,0 +1,73 @@
+[
+    {
+      "instructions": "Problem 1: Basic Packet Capture.\n\nThe **tcpdump** command allows you to capture network packets on a specified interface. In this exercise, you will capture 5 packets on the interface **eth0**. The basic syntax is: `tcpdump -c 5 -i eth0`.\n\nType the command exactly as shown. If you need help, type 'help'.",
+      "command": "tcpdump -c 5 -i eth0",
+      "output": "tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n12:34:56.789012 IP 192.168.1.10.12345 > 8.8.8.8.53: UDP, length 32\n12:34:56.789123 IP 8.8.8.8.53 > 192.168.1.10.12345: UDP, length 32\n12:34:56.789234 IP 192.168.1.10.54321 > 1.1.1.1.80: TCP, length 0\n12:34:56.789345 IP 1.1.1.1.80 > 192.168.1.10.54321: TCP, length 0\n12:34:56.789456 IP 192.168.1.10.55555 > 93.184.216.34.443: TCP, length 60",
+      "explanation": "The output shows that tcpdump captured 5 packets on the **eth0** interface. Each line represents a packet with its timestamp, source and destination IP addresses, port numbers, protocol type, and packet length. This is fundamental for understanding live network traffic.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 2: Filter Packets by Host.\n\nThis exercise demonstrates how to capture packets to or from a specific host. Use the command: `tcpdump -c 5 -i eth0 host 192.168.1.100`.\n\nHere, only packets involving the host **192.168.1.100** will be captured.",
+      "command": "tcpdump -c 5 -i eth0 host 192.168.1.100",
+      "output": "tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n12:35:00.123456 IP 192.168.1.100.45678 > 8.8.8.8.53: UDP, length 28\n12:35:00.123567 IP 8.8.8.8.53 > 192.168.1.100.45678: UDP, length 28\n12:35:00.123678 IP 192.168.1.100.34567 > 93.184.216.34.80: TCP, length 0\n12:35:00.123789 IP 93.184.216.34.80 > 192.168.1.100.34567: TCP, length 0\n12:35:00.123890 IP 192.168.1.100.56789 > 1.1.1.1.443: TCP, length 60",
+      "explanation": "Only packets that have **192.168.1.100** as either the source or destination are shown. This filtering is useful when troubleshooting traffic for a particular host.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 3: Filter by Protocol (TCP).\n\nIn this problem, you will capture only **TCP** packets. Type: `tcpdump -c 5 -i eth0 tcp`.\n\nThis command ignores UDP, ICMP, and other protocols, showing only TCP traffic which is common in many applications.",
+      "command": "tcpdump -c 5 -i eth0 tcp",
+      "output": "tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n12:36:00.234567 IP 192.168.1.10.54321 > 93.184.216.34.443: TCP, seq 1001, ack 2001, win 1024, length 0\n12:36:00.234678 IP 93.184.216.34.443 > 192.168.1.10.54321: TCP, seq 2001, ack 1002, win 2048, length 0\n12:36:00.234789 IP 192.168.1.10.12345 > 1.1.1.1.80: TCP, seq 3001, ack 4001, win 512, length 60\n12:36:00.234890 IP 1.1.1.1.80 > 192.168.1.10.12345: TCP, seq 4001, ack 3061, win 1024, length 60\n12:36:00.235000 IP 192.168.1.10.22222 > 8.8.4.4.443: TCP, seq 5001, ack 6001, win 1024, length 0",
+      "explanation": "This output displays only **TCP** traffic. Filtering by protocol is essential when you are analyzing issues related to specific transport mechanisms.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 4: Verbose Output Mode.\n\nThe **-v** option increases the verbosity of tcpdump's output. Type: `tcpdump -c 5 -i eth0 -v`.\n\nWith this option, additional details such as the packet's TTL, type of service, and IP flags are displayed, offering deeper insight into packet attributes.",
+      "command": "tcpdump -c 5 -i eth0 -v",
+      "output": "tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n12:37:00.345678 IP (tos 0x0, ttl 64, id 12345, offset 0, flags [DF], proto TCP (6), length 60) 192.168.1.10.34567 > 93.184.216.34.80: Flags [S], seq 0, win 65535, options [mss 1460,sackOK,TS val 123456789 ecr 0,nop,wscale 7], length 0\n12:37:00.345789 IP (tos 0x0, ttl 64, id 54321, offset 0, flags [DF], proto TCP (6), length 60) 93.184.216.34.80 > 192.168.1.10.34567: Flags [S.], seq 0, ack 1, win 65535, options [mss 1460,sackOK,TS val 987654321 ecr 123456789,nop,wscale 7], length 0\n12:37:00.345890 IP (tos 0x0, ttl 64, id 11111, offset 0, flags [DF], proto TCP (6), length 60) 192.168.1.10.34567 > 93.184.216.34.80: Flags [.], ack 1, win 65535, length 0\n12:37:00.345901 IP (tos 0x0, ttl 64, id 22222, offset 0, flags [DF], proto TCP (6), length 52) 93.184.216.34.80 > 192.168.1.10.34567: Flags [F.], seq 1, ack 1, win 65535, length 0",
+      "explanation": "The additional details (e.g., **TTL**, **MSS**, and various flags) provide a more comprehensive view of each packet's header, which is vital for diagnosing subtle network issues.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 5: Capture Traffic on Port 80.\n\nWeb traffic typically uses port 80 (HTTP). Type: `tcpdump -c 5 -i eth0 port 80`.\n\nThis command filters and displays only packets where either the source or destination port is 80, helping you focus on web traffic analysis.",
+      "command": "tcpdump -c 5 -i eth0 port 80",
+      "output": "tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n12:38:00.456789 IP 192.168.1.10.12345 > 93.184.216.34.80: TCP, seq 0, ack 1, win 1024, length 60\n12:38:00.456890 IP 93.184.216.34.80 > 192.168.1.10.12345: TCP, seq 1, ack 61, win 2048, length 60\n12:38:00.456901 IP 192.168.1.10.22222 > 93.184.216.34.80: TCP, seq 1001, ack 2001, win 1024, length 0\n12:38:00.456912 IP 93.184.216.34.80 > 192.168.1.10.22222: TCP, seq 2001, ack 1002, win 2048, length 0\n12:38:00.456923 IP 192.168.1.10.33333 > 93.184.216.34.80: TCP, seq 3001, ack 4001, win 1024, length 60",
+      "explanation": "This output is focused exclusively on HTTP traffic, filtering out unrelated packets. It is especially useful when analyzing issues related to web connectivity.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 6: Capture ICMP Packets.\n\nICMP packets are used for operations like **ping**. Type: `tcpdump -c 5 -i eth0 icmp`.\n\nThis command filters the output to show only ICMP traffic, which is instrumental in understanding connectivity and network diagnostics.",
+      "command": "tcpdump -c 5 -i eth0 icmp",
+      "output": "tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n12:39:00.567890 IP 192.168.1.10 > 8.8.8.8: ICMP echo request, id 12345, seq 1, length 64\n12:39:00.567901 IP 8.8.8.8 > 192.168.1.10: ICMP echo reply, id 12345, seq 1, length 64\n12:39:00.567912 IP 192.168.1.10 > 8.8.4.4: ICMP echo request, id 54321, seq 1, length 64\n12:39:00.567923 IP 8.8.4.4 > 192.168.1.10: ICMP echo reply, id 54321, seq 1, length 64\n12:39:00.567934 IP 192.168.1.10 > 1.1.1.1: ICMP echo request, id 67890, seq 1, length 64",
+      "explanation": "The output shows a series of ICMP echo requests and replies. This is typical of a **ping** operation and helps in understanding network latency and packet loss.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 7: Display Packet Payloads.\n\nSometimes it is necessary to inspect the packet contents. Use the **-X** option to display both hex and ASCII output. Type: `tcpdump -c 3 -i eth0 -X`.\n\nThis command shows the packet headers as well as the payload, which can be useful for debugging or protocol analysis.",
+      "command": "tcpdump -c 3 -i eth0 -X",
+      "output": "tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n12:40:00.678901 IP 192.168.1.10.12345 > 93.184.216.34.80: TCP, seq 0, ack 1, win 1024, length 60\n    0x0000:  4500 003c 1c46 4000 4006 b1e6 c0a8 010a  E..<.F@.@.......\n    0x0010:  5db8 d822 3039 0050 0000 0000 0000 0000  ]..\"09.P........\n    0x0020:  5002 0400 91fe 0000 0204 05b4            P........\n12:40:00.678912 IP 93.184.216.34.80 > 192.168.1.10.12345: TCP, seq 1, ack 61, win 2048, length 60\n    0x0000:  4500 003c 1c47 4000 4006 b1e5 5db8 d822  E..<.G@.@..]..\"\n    0x0010:  c0a8 010a 0050 3039 0000 0001 0000 0000  ...P09..........\n    0x0020:  5010 0800 91fe 0000 0204 05b4            P.........\n12:40:00.678923 IP 192.168.1.10.12345 > 93.184.216.34.80: TCP, seq 61, ack 1, win 1024, length 0\n    0x0000:  4500 0028 1c48 4000 4006 b1f1 c0a8 010a  E..(H@.@.......\n    0x0010:  5db8 d822 3039 0050 0000 003d 0000 0000  ]..\"09.P...=....",
+      "explanation": "The **-X** option causes tcpdump to display each packet’s data payload in both hexadecimal and ASCII formats. This dual-format view helps in spotting patterns or anomalies within the packet data.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 8: Save Captured Packets to a File.\n\nTo analyze packets later or with a different tool, you can save the capture to a file. Type: `tcpdump -i eth0 -c 5 -w capture.pcap`.\n\nThis command writes the captured packets to a file named **capture.pcap**. No detailed packet output is shown on the screen.",
+      "command": "tcpdump -i eth0 -c 5 -w capture.pcap",
+      "output": "tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n5 packets captured\n5 packets received by filter\n0 packets dropped by kernel",
+      "explanation": "The output confirms that 5 packets were captured and saved to **capture.pcap**. This file can later be analyzed using tcpdump’s **-r** option or with other packet analysis tools.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 9: Read Packets from a File.\n\nAfter saving packets to a file, you can review them later. Type: `tcpdump -r capture.pcap`.\n\nThis command reads the contents of **capture.pcap** and displays the captured packet details on the terminal.",
+      "command": "tcpdump -r capture.pcap",
+      "output": "reading from file capture.pcap, link-type EN10MB (Ethernet)\n12:41:00.789012 IP 192.168.1.10.12345 > 93.184.216.34.80: TCP, seq 0, ack 1, win 1024, length 60\n12:41:00.789123 IP 93.184.216.34.80 > 192.168.1.10.12345: TCP, seq 1, ack 61, win 2048, length 60\n12:41:00.789234 IP 192.168.1.10.22222 > 93.184.216.34.80: TCP, seq 1001, ack 2001, win 1024, length 0\n12:41:00.789345 IP 93.184.216.34.80 > 192.168.1.10.22222: TCP, seq 2001, ack 1002, win 2048, length 0\n12:41:00.789456 IP 192.168.1.10.33333 > 93.184.216.34.80: TCP, seq 3001, ack 4001, win 1024, length 60",
+      "explanation": "The command reads from the file **capture.pcap** and outputs each packet’s summary as if it were captured live. This process is essential for offline packet analysis.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 10: Filter by Host and Port (SSH Traffic).\n\nTo capture specific traffic, combine filters. Type: `tcpdump -c 5 -i eth0 host 192.168.1.100 and port 22`.\n\nThis command targets packets involving the host **192.168.1.100** and the **SSH** port 22, which is useful for monitoring secure shell sessions.",
+      "command": "tcpdump -c 5 -i eth0 host 192.168.1.100 and port 22",
+      "output": "tcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n12:42:00.890123 IP 192.168.1.100.34567 > 203.0.113.10.22: TCP, seq 0, ack 1, win 1024, length 0\n12:42:00.890234 IP 203.0.113.10.22 > 192.168.1.100.34567: TCP, seq 1, ack 1, win 2048, length 0\n12:42:00.890345 IP 192.168.1.100.34567 > 203.0.113.10.22: TCP, seq 1, ack 2, win 1024, length 60\n12:42:00.890456 IP 203.0.113.10.22 > 192.168.1.100.34567: TCP, seq 2, ack 61, win 2048, length 60\n12:42:00.890567 IP 192.168.1.100.34567 > 203.0.113.10.22: TCP, seq 61, ack 2, win 1024, length 0",
+      "explanation": "The combined filter ensures that only SSH-related traffic is captured. Such specificity is key when diagnosing issues with secure connections.",
+      "promptAppearance": "student@linux:~$"
+    }
+  ]
+  
