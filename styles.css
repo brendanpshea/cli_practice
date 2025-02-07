@@ -1,0 +1,56 @@
+/* styles.css */
+body {
+    background-color: black;
+    color: #00FF00;
+    font-family: monospace;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  #terminal {
+    border: 1px solid #00FF00;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* **instructions** appear in blue */
+  .instructions.blue {
+    color: #00BFFF;
+    margin-bottom: 10px;
+  }
+  
+  /* **output** is green and preserves whitespace */
+  .output.green {
+    color: #00FF00;
+    white-space: pre-wrap;
+    margin-bottom: 10px;
+  }
+  
+  /* **prompt-line** displays prompt and input inline */
+  .prompt-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .prompt {
+    color: #00FF00;
+    margin-right: 5px;
+  }
+  
+  .commandInput {
+    background: transparent;
+    border: none;
+    color: #00FF00;
+    outline: none;
+    font-family: monospace;
+    flex: 1;
+  }
+  
+  /* Separator between problem blocks */
+  .separator {
+    margin: 10px 0;
+    color: #00FF00;
+  }
+  

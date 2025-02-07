@@ -1,0 +1,18 @@
+
+[
+    {
+      "instructions": "Enter the command to ping IP address 172.33.5.12. This command sends ICMP echo requests to verify connectivity.",
+      "command": "ping 172.33.5.12",
+      "output": "PING 172.33.5.12 (172.33.5.12): 56 data bytes\n64 bytes from 172.33.5.12: icmp_seq=0 ttl=64 time=0.042 ms\n--- 172.33.5.12 ping statistics ---\n1 packets transmitted, 1 packets received, 0% packet loss",
+      "explanation": "The output confirms that the ping command was successful. ICMP echo requests were sent and a reply was received, indicating the target is reachable.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Enter the command to check the network configuration. This command displays current network interface information.",
+      "command": "ifconfig",
+      "output": "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 192.168.1.5  netmask 255.255.255.0  broadcast 192.168.1.255\n        ...",
+      "explanation": "The output reveals details about the network interface 'eth0', including its IP address, netmask, and broadcast address. This helps in verifying network settings.",
+      "promptAppearance": "student@linux:~$"
+    }
+  ]
+  
