@@ -1,0 +1,93 @@
+[
+    {
+      "instructions": "Problem 1: Initial Speed Test\n\nUsers on the 3rd floor report slow network speeds. First, let's do a basic speed test to confirm the issue.\n\nType exactly: `wget http://speedtest.local/testfile`",
+      "command": "wget http://speedtest.local/testfile",
+      "output": "--2024-02-13 10:15:01--  http://speedtest.local/testfile\nResolving speedtest.local... 192.168.1.5\nConnecting to speedtest.local|192.168.1.5|:80... connected.\nHTTP request sent, awaiting response... 200 OK\nLength: 10485760 (10M) [application/octet-stream]\nSaving to: 'testfile'\n\ntestfile            100%[===================>]  10.00M  1.25MB/s    in 8.0s",
+      "explanation": "The **wget** command downloads files from web servers. Here we use it for a speed test:\n\n- wget starts downloading a test file\n- The output shows progress and speed\n- 1.25MB/s is much slower than expected (should be ~12MB/s)\n- MB/s stands for Megabytes per second\n- Speed test confirms user complaints",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Problem 2: Check Interface Status\n\nLet's check if our network card is working properly.\n\nType exactly: `ifconfig eth0`",
+      "command": "ifconfig eth0",
+      "output": "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 192.168.1.100  netmask 255.255.255.0  broadcast 192.168.1.255\n        ether 00:0c:29:45:67:89  txqueuelen 1000  (Ethernet)\n        RX packets 542698  bytes 48291732 (48.2 MB)\n        RX errors 0  dropped 0  overruns 0  frame 0\n        TX packets 394851  bytes 187340272 (187.3 MB)\n        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0",
+      "explanation": "The **ifconfig** command shows network interface settings:\n\n- UP means the interface is active\n- RUNNING means it's connected to a network\n- RX means received data, TX means transmitted\n- 'errors' shows damaged packets\n- 'dropped' shows discarded packets\n- MTU (Maximum Transmission Unit) is packet size\n- Everything looks normal here",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Problem 3: Test Local Network Speed\n\nTest the connection speed to the local router.\n\nType exactly: `ping -c 4 192.168.1.1`",
+      "command": "ping -c 4 192.168.1.1",
+      "output": "PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.\n64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.432 ms\n64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=0.445 ms\n64 bytes from 192.168.1.1: icmp_seq=3 ttl=64 time=0.439 ms\n64 bytes from 192.168.1.1: icmp_seq=4 ttl=64 time=0.447 ms\n\n--- 192.168.1.1 ping statistics ---\n4 packets transmitted, 4 received, 0% packet loss, time 3005ms\nrtt min/avg/max/mdev = 0.432/0.441/0.447/0.006 ms",
+      "explanation": "The **ping** command tests if a device is reachable:\n\n- Sends 4 test packets (-c 4 flag)\n- Shows how long each packet takes (in milliseconds)\n- 0% packet loss means all packets reached destination\n- Under 1ms is very fast (good for local network)\n- This shows local network is working well",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Problem 4: Test Internet Speed\n\nCheck if the internet connection is causing slowdown.\n\nType exactly: `ping -c 4 8.8.8.8`",
+      "command": "ping -c 4 8.8.8.8",
+      "output": "PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=116 time=85.4 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=116 time=84.9 ms\n64 bytes from 8.8.8.8: icmp_seq=3 ttl=116 time=85.2 ms\n64 bytes from 8.8.8.8: icmp_seq=4 ttl=116 time=85.1 ms\n\n--- 8.8.8.8 ping statistics ---\n4 packets transmitted, 4 received, 0% packet loss, time 3006ms\nrtt min/avg/max/mdev = 84.9/85.2/85.4/0.2 ms",
+      "explanation": "Testing internet connectivity:\n\n- Much slower response time (85ms)\n- Still no packet loss\n- High latency could affect speed\n- Shows possible internet connection issue",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Problem 5: Check Connection Usage\n\nSee what's using our network connection.\n\nType exactly: `netstat -an | grep ESTABLISHED`",
+      "command": "netstat -an | grep ESTABLISHED",
+      "output": "tcp        0    125 192.168.1.100:49234     216.58.194.46:443      ESTABLISHED\ntcp     1420      0 192.168.1.100:49235     172.217.11.238:443     ESTABLISHED\ntcp    12580      0 192.168.1.100:49242     192.168.1.5:445        ESTABLISHED",
+      "explanation": "The **netstat** command shows network connections:\n\n- -an shows all connections numerically\n- grep ESTABLISHED filters for active connections\n- Port 443 is for secure web traffic (HTTPS)\n- The numbers before the IP show queued data\n- High numbers indicate network congestion\n- Several large queues could cause slowdown",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Problem 6: Check Network Load\n\nMonitor current network traffic.\n\nType exactly: `netstat -i`",
+      "command": "netstat -i",
+      "output": "Kernel Interface table\nIface   MTU  RX-OK RX-ERR RX-DRP RX-OVR  TX-OK TX-ERR TX-DRP TX-OVR Flg\neth0   1500  54269      0      0      0  39485      0      0      0 BMRU\nlo    65536   1264      0      0      0   1264      0      0      0 LRU",
+      "explanation": "The **netstat -i** command shows interface statistics:\n\n- RX-OK/TX-OK show successful packets\n- RX-ERR/TX-ERR show error counts\n- RX-DRP/TX-DRP show dropped packets\n- No errors or drops visible\n- Interface is working correctly",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Problem 7: Route Check\n\nVerify the network path isn't causing slowdown.\n\nType exactly: `traceroute 8.8.8.8`",
+      "command": "traceroute 8.8.8.8",
+      "output": "traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets\n 1  192.168.1.1 (192.168.1.1)  0.442 ms  0.445 ms  0.439 ms\n 2  10.0.0.1 (10.0.0.1)  25.141 ms  25.321 ms  25.265 ms\n 3  * * *\n 4  8.8.8.8 (8.8.8.8)  85.441 ms  85.445 ms  85.439 ms",
+      "explanation": "The **traceroute** command shows the path to a destination:\n\n- Each line is a 'hop' (router along the path)\n- Numbers show delay at each hop (in milliseconds)\n- Stars (***) mean no response from that hop\n- We can see where delays start\n- Local network (hop 1) is fast\n- Problems begin at hop 2",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Problem 8: Check Current Processes\n\nLet's see which processes are using the network.\n\nType exactly: `netstat -p | grep -i estab`",
+      "command": "netstat -p | grep -i estab",
+      "output": "tcp        0    125 192.168.1.100:49234     216.58.194.46:443      ESTABLISHED 1234/chrome\ntcp     1420      0 192.168.1.100:49235     172.217.11.238:443     ESTABLISHED 1234/chrome\ntcp    12580      0 192.168.1.100:49242     192.168.1.5:445        ESTABLISHED 5678/backup",
+      "explanation": "The **netstat -p** command shows which programs use the network:\n\n- Chrome browser has two connections\n- A backup process is running\n- Backup is using lots of bandwidth\n- This is likely causing the slowdown",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Practice Problem 1: Marketing Department Speed Issue\n\nThe marketing department reports that accessing their shared drive is very slow. Test the connection speed to their file server at marketing.local/testfile.",
+      "command": "wget http://marketing.local/testfile",
+      "output": "--2024-02-13 11:15:01--  http://marketing.local/testfile\nResolving marketing.local... 192.168.2.15\nConnecting to marketing.local|192.168.2.15|:80... connected.\nHTTP request sent, awaiting response... 200 OK\nLength: 10485760 (10M) [application/octet-stream]\nSaving to: 'testfile'\n\ntestfile            100%[===================>]  10.00M  1.15MB/s    in 8.7s",
+      "explanation": "Testing network speed:\n\n- Download completed but very slow\n- 1.15MB/s is much slower than expected\n- Similar to previous slow speed issue\n- Confirms user complaints about shared drive",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Practice Problem 2: Network Interface Investigation\n\nCheck your network interface configuration and status.",
+      "command": "ifconfig eth0",
+      "output": "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 192.168.2.100  netmask 255.255.255.0  broadcast 192.168.2.255\n        ether 00:0c:29:45:67:90  txqueuelen 1000  (Ethernet)\n        RX packets 234567  bytes 28291732 (28.2 MB)\n        RX errors 0  dropped 0  overruns 0  frame 0\n        TX packets 194851  bytes 87340272 (87.3 MB)\n        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0",
+      "explanation": "Interface shows normal operation:\n\n- Interface is UP and RUNNING\n- No errors or dropped packets\n- Network card functioning correctly\n- Problem isn't with interface configuration",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Practice Problem 3: Network Path Check\n\nTrace the network path to the marketing file server to identify any delays.",
+      "command": "traceroute marketing.local",
+      "output": "traceroute to marketing.local (192.168.2.15), 30 hops max, 60 byte packets\n 1  192.168.2.1 (192.168.2.1)  0.442 ms  0.445 ms  0.439 ms\n 2  192.168.2.15 (192.168.2.15)  0.541 ms  0.565 ms  0.552 ms",
+      "explanation": "Checking network path:\n\n- Only 2 hops to destination\n- Response times are good\n- No routing issues found\n- Local network path is working well",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Practice Problem 4: Connection Analysis\n\nCheck current network connections to identify potential bandwidth usage.",
+      "command": "netstat -an | grep ESTABLISHED",
+      "output": "tcp        0    325 192.168.2.100:49234     172.16.1.100:443      ESTABLISHED\ntcp     1820      0 192.168.2.100:49235     172.16.1.100:443      ESTABLISHED\ntcp    32580      0 192.168.2.100:49242     192.168.2.15:445       ESTABLISHED",
+      "explanation": "Active connections show:\n\n- Multiple connections to port 443 (HTTPS)\n- Large data queue (32580) to file server\n- High buffer usage on file server connection\n- Possible network congestion detected",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Practice Problem 5: Process Investigation\n\nIdentify which processes are using the network connections.",
+      "command": "netstat -p | grep -i estab",
+      "output": "tcp        0    325 192.168.2.100:49234     172.16.1.100:443      ESTABLISHED 2345/chrome\ntcp     1820      0 192.168.2.100:49235     172.16.1.100:443      ESTABLISHED 2345/chrome\ntcp    32580      0 192.168.2.100:49242     192.168.2.15:445       ESTABLISHED 7890/backup.sh",
+      "explanation": "Process examination reveals:\n\n- Chrome browser has two connections\n- backup.sh script is running\n- Backup process using heavy bandwidth\n- Found likely cause of slowdown",
+      "promptAppearance": "student@linux:~$ "
+    }
+]

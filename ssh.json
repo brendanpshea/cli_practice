@@ -1,0 +1,100 @@
+[
+    {
+      "instructions": "Problem 1: Checking Server Status\n\nThe web server (webserver.local - 192.168.1.10) is not responding to HTTP requests. You need to connect to it remotely to investigate. First, let's try to connect using SSH.\n\nType exactly: `ssh admin@192.168.1.10`",
+      "command": "ssh admin@192.168.1.10",
+      "output": "The authenticity of host '192.168.1.10 (192.168.1.10)' can't be established.\nRSA key fingerprint is SHA256:K9VXDhk9f9K9mZ9LfK9mL9K9mZ9LfK9mL9K9mZ9.\nAre you sure you want to continue connecting (yes/no/[fingerprint])? yes\nWarning: Permanently added '192.168.1.10' (RSA) to the list of known hosts.\nadmin@192.168.1.10's password: ********\n\nWelcome to Ubuntu 22.04.2 LTS\nLast login: Wed Feb 14 09:15:32 2024 from 192.168.1.100",
+      "explanation": "The **ssh** command creates a secure connection to another computer:\n\n- Format is: ssh username@hostname\n- First connection shows fingerprint verification\n- 'yes' adds server to known hosts\n- Password authentication required\n- Welcome message confirms successful login",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Problem 2: Check Web Server Process\n\nNow that we're connected, let's check if the web server process (apache2) is running.\n\nType exactly: `systemctl status apache2`",
+      "command": "systemctl status apache2",
+      "output": "● apache2.service - The Apache HTTP Server\n     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)\n     Active: inactive (dead) since Wed 2024-02-14 09:10:15 UTC; 5min ago\n       Docs: https://httpd.apache.org/docs/2.4/\n    Process: 1234 ExecStart=/usr/sbin/apachectl start (code=exited, status=0/SUCCESS)\n   Main PID: 1235 (code=exited, status=0/SUCCESS)",
+      "explanation": "The **systemctl status** command shows service status:\n\n- apache2 is currently not running (inactive)\n- Service stopped about 5 minutes ago\n- This explains why web server isn't responding\n- We need to start the service",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Problem 3: Check System Logs\n\nBefore starting the service, let's check why it stopped.\n\nType exactly: `sudo tail /var/log/apache2/error.log`",
+      "command": "sudo tail /var/log/apache2/error.log",
+      "output": "[Wed Feb 14 09:10:15 2024] [notice] caught SIGTERM, shutting down\n[Wed Feb 14 09:10:15 2024] [error] Server ran out of disk space\n[Wed Feb 14 09:10:15 2024] [error] Unable to write to log file\n[Wed Feb 14 09:10:15 2024] [notice] Apache/2.4.41 shutdown requested",
+      "explanation": "The **tail** command shows the end of a file:\n\n- sudo needed for system logs\n- Shows Apache stopped due to disk space\n- Multiple errors recorded\n- Time matches service stoppage",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Problem 4: Check Disk Space\n\nThe logs suggest a disk space issue. Let's verify.\n\nType exactly: `df -h`",
+      "command": "df -h",
+      "output": "Filesystem      Size  Used  Avail  Use%  Mounted on\n/dev/sda1       20G   19.9G  100M   99%   /\n/dev/sda2       50G   10G    40G    20%   /home",
+      "explanation": "The **df** command shows disk space usage:\n\n- -h shows sizes in human-readable format\n- Root partition (/) is almost full\n- Only 100MB free space\n- /home has plenty of space",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Problem 5: Find Large Files\n\nLet's find what's using up the space.\n\nType exactly: `sudo du -h /var/log | sort -rh | head -5`",
+      "command": "sudo du -h /var/log | sort -rh | head -5",
+      "output": "15G     /var/log\n14G     /var/log/apache2\n14G     /var/log/apache2/access.log\n1G      /var/log/syslog\n100M    /var/log/auth.log",
+      "explanation": "This command combination finds large files:\n\n- du shows disk usage\n- -h makes sizes readable\n- sort -rh orders by size (largest first)\n- head -5 shows top 5 results\n- Apache access log is very large",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Problem 6: Clean Up Log File\n\nThe access log is too large. Let's rotate it.\n\nType exactly: `sudo logrotate -f /etc/logrotate.d/apache2`",
+      "command": "sudo logrotate -f /etc/logrotate.d/apache2",
+      "output": "rotating pattern: /var/log/apache2/*.log\n antigas: No matching files found\nrotating log /var/log/apache2/access.log, log->rotated\nrotating log /var/log/apache2/error.log, log->rotated",
+      "explanation": "**logrotate** manages log files:\n\n- -f forces rotation\n- Moves current log to backup\n- Creates new empty log\n- Compresses old log",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Problem 7: Verify Space Freed\n\nCheck if we have enough space now.\n\nType exactly: `df -h /`",
+      "command": "df -h /",
+      "output": "Filesystem      Size  Used  Avail  Use%  Mounted on\n/dev/sda1       20G   5.9G   14G    30%   /",
+      "explanation": "Checking root partition space:\n\n- Now only 30% used\n- 14GB free space\n- Plenty of room for logs\n- Safe to start Apache",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Problem 8: Start Web Server\n\nNow we can safely start Apache.\n\nType exactly: `sudo systemctl start apache2`",
+      "command": "sudo systemctl start apache2",
+      "output": "",
+      "explanation": "Starting Apache service:\n\n- sudo required for service control\n- No output means success\n- Service should now be running\n- Let's verify status",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Problem 9: Verify Service\n\nConfirm Apache is running.\n\nType exactly: `systemctl status apache2`",
+      "command": "systemctl status apache2",
+      "output": "● apache2.service - The Apache HTTP Server\n     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)\n     Active: active (running) since Wed 2024-02-14 09:25:15 UTC; 5s ago\n       Docs: https://httpd.apache.org/docs/2.4/\n    Process: 1834 ExecStart=/usr/sbin/apachectl start (code=exited, status=0/SUCCESS)\n   Main PID: 1835",
+      "explanation": "Checking service status again:\n\n- Apache is now running\n- Started successfully\n- No errors reported\n- Problem resolved",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Problem 10: Exit SSH Session\n\nWe're done troubleshooting. Let's exit the SSH session.\n\nType exactly: `exit`",
+      "command": "exit",
+      "output": "logout\nConnection to 192.168.1.10 closed.",
+      "explanation": "The **exit** command ends SSH session:\n\n- Logs out of remote system\n- Closes connection securely\n- Returns to local prompt\n- Session terminated properly",
+      "promptAppearance": "admin@webserver:~$ "
+    },
+    {
+      "instructions": "Practice Problem 1: Database Server Check\n\nUsers report the database is slow. Connect to the database server (db.local - 192.168.1.20) using SSH.",
+      "command": "ssh admin@192.168.1.20",
+      "output": "The authenticity of host '192.168.1.20 (192.168.1.20)' can't be established.\nRSA key fingerprint is SHA256:L8VYEjk8g9L8VYEjk8g9L8VYEjk8g9L8VYEjk8g9.\nAre you sure you want to continue connecting (yes/no/[fingerprint])? yes\nWarning: Permanently added '192.168.1.20' (RSA) to the list of known hosts.\nadmin@192.168.1.20's password: ********\n\nWelcome to Ubuntu 22.04.2 LTS",
+      "explanation": "SSH connection process:\n\n- Connecting to new server\n- Verified fingerprint\n- Added to known hosts\n- Successfully logged in",
+      "promptAppearance": "student@linux:~$ "
+    },
+    {
+      "instructions": "Practice Problem 2: Database Service Status\n\nCheck if the MySQL database service is running. The service is called mysql",
+      "command": "systemctl status mysql",
+      "output": "● mysql.service - MySQL Community Server\n     Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled)\n     Active: active (running) since Wed 2024-02-14 08:00:15 UTC; 1h 25min ago\n       Docs: man:mysqld(8)\n             http://dev.mysql.com/doc/refman/en/using-systemd.html\n    Process: 1234 ExecStart=/usr/sbin/mysqld (code=exited, status=0/SUCCESS)\n   Main PID: 1235 (mysqld)\n     Status: \"Server is operational\"\n      Tasks: 38 (limit: 4915)",
+      "explanation": "Service status shows:\n\n- MySQL is running\n- Running for 1h 25min\n- Service is operational\n- Multiple tasks active",
+      "promptAppearance": "admin@db:~$ "
+    },
+    {
+        "instructions": "Practice Problem 3: Check Database Logs\n\nCheck the most recent MySQL error logs for any issues. They live at /var/log/mysql/error.log",
+        "command": "sudo tail /var/log/mysql/error.log",
+        "output": "[2024-02-14 09:20:15] [Note] InnoDB: Buffer pool(s) load completed at 240214 09:20:15\n[2024-02-14 09:22:18] [Warning] Aborted connection 305 to db: 'users'\n[2024-02-14 09:23:32] [Warning] Aborted connection 306 to db: 'users'\n[2024-02-14 09:24:45] [Warning] Too many connections",
+        "explanation": "Log analysis shows:\n\n- Multiple aborted connections\n- Too many connection errors\n- Recent warnings\n- Database having connection issues",
+        "promptAppearance": "admin@db:$ "
+        },
+    {
+      "instructions": "Practice Problem 4: Exit Session\n\nLog findings and exit the SSH session.",
+      "command": "exit",
+      "output": "logout\nConnection to 192.168.1.20 closed.",
+      "explanation": "Session cleanup:\n\n- Logged out properly\n- Connection closed\n- Found high resource usage\n- Need performance tuning",
+      "promptAppearance": "admin@db:~$ "
+    }
+]

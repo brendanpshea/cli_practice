@@ -1,0 +1,94 @@
+[
+    {
+      "instructions": "Problem 1: Network Connectivity Issue.\n\nYour Windows machine cannot access **network.com**, but local connections work fine. Other users on the network do not seem to have this problem. Your first step is to check the network route using **tracert**.\n\nType exactly: `tracert network.com`.",
+      "command": "tracert network.com",
+      "output": "Tracing route to network.com [203.0.113.10]\nover a maximum of 30 hops:\n\n  1    <1 ms    <1 ms    <1 ms  192.168.1.1\n  2    20 ms    19 ms    22 ms  203.0.113.1\n  3     *        *        *     Request timed out.\n  4     *        *        *     Request timed out.\n\nTrace complete.",
+      "explanation": "**tracert** (Trace Route) maps the path that packets take to reach a destination, showing each hop along the way. If the request times out, it suggests that traffic is blocked beyond that point.\n\n- `tracert network.com`: Sends packets toward `network.com` and lists each router (hop) along the route.\n- `* * * Request timed out`: Indicates that the packet was blocked or lost at that hop.",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 2: Ping the Website.\n\nConfirm whether your computer can reach **network.com** by sending ICMP echo requests.\n\nType exactly: `ping network.com`.",
+      "command": "ping network.com",
+      "output": "Pinging network.com [203.0.113.10] with 32 bytes of data:\nRequest timed out.\nRequest timed out.\nRequest timed out.\nRequest timed out.\n\nPing statistics for 203.0.113.10:\n    Packets: Sent = 4, Received = 0, Lost = 4 (100% loss),",
+      "explanation": "**ping** tests whether a remote host is reachable by sending ICMP (Internet Control Message Protocol) echo requests.\n\n- `ping network.com`: Sends four packets to `network.com` and waits for a reply.\n- `Request timed out`: No response was received, meaning traffic is blocked or the host is unreachable.",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 3: Check Network Configuration.\n\nDisplay your computer's full network configuration details (IP address, subnet mask, and default gateway) without referring back to previous examples. Rely on your memory of the proper command.",
+      "command": "ipconfig /all",
+      "output": "Ethernet adapter Ethernet:\n   Connection-specific DNS Suffix  . : example.local\n   IPv4 Address. . . . . . . . . . . : 192.168.1.100\n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : 192.168.1.1",
+      "explanation": "Recall the **ipconfig** command with the **/all** parameter. This command displays detailed network configuration information, ensuring you can verify your local settings without guidance.",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 4: Verify Local Network Connection.\n\nEnsure your machine is connected to the local network by pinging the default gateway. Remember the proper command from earlier without looking it up.",
+      "command": "ping 192.168.1.1",
+      "output": "Pinging 192.168.1.1 with 32 bytes of data:\nReply from 192.168.1.1: bytes=32 time<1ms TTL=64\nReply from 192.168.1.1: bytes=32 time<1ms TTL=64\nReply from 192.168.1.1: bytes=32 time<1ms TTL=64\nReply from 192.168.1.1: bytes=32 time<1ms TTL=64\n\nPing statistics for 192.168.1.1:\n    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),",
+      "explanation": "Recall the **ping** command used to verify connectivity to your default gateway. This confirms whether your local network connection is active.",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 5: View Access Control List (ACL) Rules on the Router.\n\nSwitch to the router's command-line interface and display all ACLs. Use your memory of the proper command.",
+      "command": "show access-lists",
+      "output": "Standard IP access list 100\n  permit tcp any 192.168.1.0 255.255.255.0 eq 80\n  permit udp any 192.168.1.0 255.255.255.0 eq 53\n  deny ip any 203.0.113.0 255.255.255.0\n  permit ip any any",
+      "explanation": "**show access-lists** displays all firewall rules configured on the router. This provides a comprehensive view of the ACLs, including those that block or permit traffic.",
+      "promptAppearance": "Router#"
+    },
+    {
+      "instructions": "Problem 6: Isolate the Blocking Rule.\n\nFilter the router's ACL output to display only the rules that block traffic. Use your recollection of how to apply a filter in this context.",
+      "command": "show access-lists | include deny",
+      "output": "deny ip any 203.0.113.0 255.255.255.0",
+      "explanation": "This command uses a **filter** (the pipe operator with **include**) to show only lines containing 'deny', thus isolating the rule that blocks **network.com**.",
+      "promptAppearance": "Router#"
+    },
+    {
+      "instructions": "Problem 7: Enter Configuration Mode.\n\nEnter the router's configuration mode to prepare for modifying ACLs. Recall the correct command from previous exercises.",
+      "command": "configure terminal",
+      "output": "Router(config)#",
+      "explanation": "The **configure terminal** command allows you to modify the router's settings. This mode is required before making any changes to the configuration.",
+      "promptAppearance": "Router(config)#"
+    },
+    {
+      "instructions": "Problem 8: Remove the Blocking Rule.\n\nWhile in configuration mode, remove the ACL rule that blocks access to **network.com**. Use your memory of the precise command.",
+      "command": "no access-list 100 deny ip any 203.0.113.0 255.255.255.0",
+      "output": "Router(config)#",
+      "explanation": "The command prefixed with **no** reverses the configuration. Here, **no access-list 100 deny ...** removes the ACL rule that was blocking **network.com**.",
+      "promptAppearance": "Router(config)#"
+    },
+    {
+      "instructions": "Problem 9: Test Connectivity Again.\n\nAfter removing the blocking rule, test connectivity to **network.com** by pinging it. Rely on your previous knowledge to input the correct command.",
+      "command": "ping network.com",
+      "output": "Reply from 203.0.113.10: bytes=32 time=45ms TTL=56\nReply from 203.0.113.10: bytes=32 time=47ms TTL=56",
+      "explanation": "A successful **ping** (as indicated by reply messages) confirms that the removal of the blocking rule has restored access to **network.com**.",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 10: Trace the Route from Memory.\n\nWithout referring to previous examples, recall and execute the command that maps the path packets take to reach **network.com**.",
+      "command": "tracert network.com",
+      "output": "Tracing route to network.com [203.0.113.10]\nover a maximum of 30 hops:\n\n  1    <1 ms    <1 ms    <1 ms  192.168.1.1\n  2    20 ms    19 ms    22 ms  203.0.113.1\n  3     *        *        *     Request timed out.\n  4     *        *        *     Request timed out.\n\nTrace complete.",
+      "explanation": "Recall the **tracert** command which maps the route taken by packets. This exercise tests your memory of the command used to diagnose network paths.",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 11: Display Full Network Configuration from Memory.\n\nRecall and execute the command that shows your computer's complete network configuration, including IP address, subnet mask, and default gateway.",
+      "command": "ipconfig /all",
+      "output": "Ethernet adapter Ethernet:\n   Connection-specific DNS Suffix  . : example.local\n   IPv4 Address. . . . . . . . . . . : 192.168.1.100\n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : 192.168.1.1",
+      "explanation": "Recall the **ipconfig** command with the **/all** parameter. This command provides detailed network configuration information, reinforcing your understanding of local network settings.",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 12: Filter ACL Rules Using Memory.\n\nWithout referring back to the instructions, recall and execute the command that filters the router's ACL output to display only the rules that block traffic.",
+      "command": "show access-lists | include deny",
+      "output": "deny ip any 203.0.113.0 255.255.255.0",
+      "explanation": "Recall the method of filtering output with the pipe operator. The **show access-lists | include deny** command extracts only the ACL rules that contain the term 'deny', confirming your grasp of command filtering techniques.",
+      "promptAppearance": "Router#"
+    },
+    {
+      "instructions": "Problem 13: Enter Configuration Mode from Memory.\n\nRecall and execute the command that enters the router's configuration mode, allowing you to modify ACLs.",
+      "command": "configure terminal",
+      "output": "Router(config)#",
+      "explanation": "The **configure terminal** command is used to access the router's configuration mode. This step is essential for making changes to the router's settings.",
+      "promptAppearance": "Router(config)#"
+    }
+  ]
+  

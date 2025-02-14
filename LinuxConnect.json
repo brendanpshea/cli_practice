@@ -1,0 +1,87 @@
+[
+    {
+      "instructions": "Problem 1: Network Connectivity Issue.\n\nYour Linux machine cannot access **network.com**, but local connections work fine. Other users on the network do not seem to have this problem. Your first step is to check the network route using **traceroute**.\n\nType exactly: `traceroute network.com`.",
+      "command": "traceroute network.com",
+      "output": "traceroute to network.com (203.0.113.10), 30 hops max, 60 byte packets\n 1  192.168.1.1 (192.168.1.1)  1.234 ms  1.543 ms  1.654 ms\n 2  203.0.113.1 (203.0.113.1)  22.312 ms  23.456 ms  24.001 ms\n 3  * * * Request timed out.\n 4  * * * Request timed out.",
+      "explanation": "**traceroute** shows the path packets take to a destination, listing each hop along the way. If a hop fails, it means the connection is blocked beyond that point.\n\n- `traceroute network.com`: Sends packets to `network.com`, displaying each network device (hop) along the path.\n- `* * * Request timed out`: Indicates a firewall or network issue blocking traffic past this point.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 2: Ping the Website.\n\nConfirm whether your machine can reach **network.com** by sending ICMP echo requests.\n\nType exactly: `ping -c 4 network.com`.",
+      "command": "ping -c 4 network.com",
+      "output": "PING network.com (203.0.113.10) 56(84) bytes of data.\n--- network.com ping statistics ---\n4 packets transmitted, 0 received, 100% packet loss,",
+      "explanation": "**ping** sends ICMP echo requests to test if a host is reachable.\n\n- `ping -c 4 network.com`: Sends **4 packets** to `network.com`.\n- `100% packet loss`: No response was received, suggesting a firewall or network block.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 3: Verify Local Network Connection.\n\nEnsure your machine is connected to the local network by pinging the **default gateway**. Rely on your memory for the proper command.\n\nType exactly: `ping -c 4 192.168.1.1`.",
+      "command": "ping -c 4 192.168.1.1",
+      "output": "PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.\n64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.532 ms\n\n--- 192.168.1.1 ping statistics ---\n4 packets transmitted, 4 received, 0% packet loss,",
+      "explanation": "If **ping network.com** failed, testing connectivity to the **gateway** (router) can confirm whether the issue is beyond your local network.\n\n- `ping -c 4 192.168.1.1`: Sends 4 ICMP packets to the router.\n- A reply from 192.168.1.1 confirms your local network connection is working.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 4: Check Network Configuration.\n\nDisplay your Linux machine's network configuration (IP address, subnet mask, etc.) using the appropriate command. Recall the command without looking back.\n\nType exactly: `ip a`.",
+      "command": "ip a",
+      "output": "2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 192.168.1.100/24 brd 192.168.1.255 scope global dynamic eth0",
+      "explanation": "**ip a** (short for `ip addr show`) displays all network interfaces and their IP addresses.\n\n- `inet 192.168.1.100/24`: Shows the machine's IPv4 address and subnet mask.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 5: View Firewall Rules.\n\nCheck the system firewall (iptables) to see existing rules. Recall the command without referring back.\n\nType exactly: `sudo iptables -L`.",
+      "command": "sudo iptables -L",
+      "output": "Chain INPUT (policy ACCEPT)\n    target     prot opt source               destination       \n    ACCEPT     tcp  --  anywhere             192.168.1.0/24    tcp dpt:http\n    ACCEPT     udp  --  anywhere             192.168.1.0/24    udp dpt:domain\n    DROP       all  --  anywhere             203.0.113.0/24    \n    ACCEPT     all  --  anywhere             anywhere",
+      "explanation": "**iptables** is the Linux firewall. The command lists all rules currently in place.\n\n- `DROP all -- anywhere 203.0.113.0/24`: Blocks all traffic to **203.0.113.0/24**, which includes **network.com**.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 6: Isolate the Blocking Rule.\n\nFilter the iptables output to display only the rules that drop traffic. Rely on your previous knowledge for the syntax.\n\nType exactly: `sudo iptables -L | grep DROP`.",
+      "command": "sudo iptables -L | grep DROP",
+      "output": "DROP       all  --  anywhere             203.0.113.0/24",
+      "explanation": "This command filters the **iptables** output to show only lines containing 'DROP'.\n\n- `| grep DROP`: Searches for the word 'DROP' to isolate blocking rules.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 7: Remove the Blocking Rule.\n\nTo allow access to **network.com**, remove the DROP rule from iptables. Recall and execute the correct deletion command from memory.\n\nType exactly: `sudo iptables -D INPUT -s 203.0.113.0/24 -j DROP`.",
+      "command": "sudo iptables -D INPUT -s 203.0.113.0/24 -j DROP",
+      "output": "student@linux:~$",
+      "explanation": "This command **deletes** (`-D`) the rule blocking **203.0.113.0/24** from the **INPUT** chain, restoring access.\n\n- `-D INPUT -s 203.0.113.0/24 -j DROP`: Removes the rule that drops packets from this source.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 8: Test Connectivity Again.\n\nAfter removing the firewall rule, test connectivity to **network.com**. Recall the proper ping command from earlier.\n\nType exactly: `ping -c 4 network.com`.",
+      "command": "ping -c 4 network.com",
+      "output": "PING network.com (203.0.113.10) 56(84) bytes of data.\n64 bytes from 203.0.113.10: icmp_seq=1 ttl=56 time=45.3 ms\n\n--- network.com ping statistics ---\n4 packets transmitted, 4 received, 0% packet loss,",
+      "explanation": "A successful **ping** confirms that the network block was removed and connectivity is restored.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 9: Trace the Route from Memory.\n\nWithout referring back to previous examples, recall and execute the command that shows the network path to **network.com**.",
+      "command": "traceroute network.com",
+      "output": "traceroute to network.com (203.0.113.10), 30 hops max, 60 byte packets\n 1  192.168.1.1 (192.168.1.1)  1.234 ms  1.543 ms  1.654 ms\n 2  203.0.113.1 (203.0.113.1)  22.312 ms  23.456 ms  24.001 ms\n 3  * * * Request timed out.\n 4  * * * Request timed out.",
+      "explanation": "Recall the **traceroute** command which maps the route packets take to reach **network.com**. This tests your ability to remember and execute diagnostic commands.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 10: Ping the Website from Memory.\n\nRecall and execute the command that sends 4 ICMP echo requests to **network.com** without referring back to the example.",
+      "command": "ping -c 4 network.com",
+      "output": "PING network.com (203.0.113.10) 56(84) bytes of data.\n--- network.com ping statistics ---\n4 packets transmitted, 0 received, 100% packet loss,",
+      "explanation": "Recall the **ping -c 4 network.com** command to test connectivity. This reinforces your understanding of basic network troubleshooting commands.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 11: Display Network Configuration from Memory.\n\nWithout looking back, recall and execute the command that shows your machine's network configuration details.",
+      "command": "ip a",
+      "output": "2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    inet 192.168.1.100/24 brd 192.168.1.255 scope global dynamic eth0",
+      "explanation": "Recall the **ip a** command (short for `ip addr show`) which displays all network interfaces and their configurations.",
+      "promptAppearance": "student@linux:~$"
+    },
+    {
+      "instructions": "Problem 12: Filter Firewall Rules from Memory.\n\nWithout referring back to the previous instructions, recall and execute the command that filters iptables to show only rules that drop traffic.",
+      "command": "sudo iptables -L | grep DROP",
+      "output": "DROP       all  --  anywhere             203.0.113.0/24",
+      "explanation": "Recall how to filter output using **grep**. The command **sudo iptables -L | grep DROP** extracts only the rules that contain 'DROP', reinforcing your understanding of command piping and filtering.",
+      "promptAppearance": "student@linux:~$"
+    }
+  ]
+  

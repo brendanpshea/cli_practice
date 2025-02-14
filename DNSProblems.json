@@ -1,0 +1,115 @@
+[
+    {
+      "instructions": "Problem 1: Initial DNS Check\n\nUsers report they can access websites by IP (e.g., ping 203.0.113.10) but not by domain name (e.g., example.com). Your first step is to check basic DNS resolution.\n\nType exactly: `nslookup example.com`",
+      "command": "nslookup example.com",
+      "output": "Server:  UnKnown\nAddress:  192.168.1.1\n\n*** UnKnown can't find example.com: No response from server",
+      "explanation": "**nslookup** (Name Server Lookup) queries DNS servers to obtain domain name or IP address mapping information.\n\n- The output shows:\n  - Your DNS server is 192.168.1.1\n  - The DNS server is not responding to queries\n  - This suggests a problem with the DNS server itself",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 2: Check DNS Server Configuration\n\nVerify your current DNS server settings to ensure they are correct.\n\nType exactly: `ipconfig /all`",
+      "command": "ipconfig /all",
+      "output": "Windows IP Configuration\n\nEthernet adapter Ethernet:\n   DNS Servers . . . . . . . . . . . : 192.168.1.1\n   Primary DNS Suffix . . . . . . . : example.local\n   Connection-specific DNS Suffix . : example.local",
+      "explanation": "**ipconfig /all** displays detailed network configuration including DNS settings.\n\n- The output confirms:\n  - Primary DNS server is 192.168.1.1\n  - This matches the failing server from Problem 1",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 3: Test Alternative DNS Server\n\nTry resolving the domain using a public DNS server (8.8.8.8) to determine if the issue is with your local DNS server.\n\nType exactly: `nslookup example.com 8.8.8.8`",
+      "command": "nslookup example.com 8.8.8.8",
+      "output": "Server:  dns.google\nAddress:  8.8.8.8\n\nName:    example.com\nAddress:  93.184.216.34",
+      "explanation": "This command explicitly queries Google's public DNS server (8.8.8.8).\n\n- Success indicates:\n  - DNS resolution works with external DNS servers\n  - The problem is specific to your local DNS server (192.168.1.1)",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 4: Verify DNS Service Status\n\nAccess the DNS server (192.168.1.1) using SSH and check its service status.\n\nType exactly: `ssh admin@192.168.1.1`",
+      "command": "ssh admin@192.168.1.1",
+      "output": "Password: ********\nLogin successful\nWelcome to RouterOS!\n",
+      "explanation": "**ssh** provides secure access to the router:\n\n- Encrypted connection to router\n- Authentication required\n- More secure than telnet",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 4b: Check DNS Service Status\n\nNow that you're logged into the router, check the DNS service status.\n\nType exactly: `show service dns`",
+      "command": "show service dns",
+      "output": "DNS Service Status: Stopped\nLast Error: Configuration file not found\nProcess ID: None",
+      "explanation": "Checking the DNS service status reveals:\n\n- The DNS service is not running\n- A missing configuration file is the root cause\n- This explains why DNS queries to 192.168.1.1 fail",
+      "promptAppearance": "Router>"
+    },
+    {
+      "instructions": "Problem 5: Check DNS Configuration File\n\nExamine the DNS configuration file location.\n\nType exactly: `show file /etc/dns/dns.conf`",
+      "command": "show file /etc/dns/dns.conf",
+      "output": "Error: File not found /etc/dns/dns.conf",
+      "explanation": "This confirms the missing configuration file indicated in the service status.\n\n- The DNS configuration file is missing\n- This must be restored before the service can start",
+      "promptAppearance": "Router>"
+    },
+    {
+      "instructions": "Problem 6: Restore DNS Configuration\n\nRestore the default DNS configuration file.\n\nType exactly: `copy flash:/backup/dns.conf /etc/dns/dns.conf`",
+      "command": "copy flash:/backup/dns.conf /etc/dns/dns.conf",
+      "output": "Copy complete: 1024 bytes transferred",
+      "explanation": "This command:\n\n- Copies a backup configuration file to the correct location\n- Restores the default DNS settings",
+      "promptAppearance": "Router>"
+    },
+    {
+      "instructions": "Problem 7: Start DNS Service\n\nStart the DNS service with the restored configuration.\n\nType exactly: `service dns start`",
+      "command": "service dns start",
+      "output": "DNS service starting...\nDNS service started successfully\nProcess ID: 1234",
+      "explanation": "Starting the DNS service:\n\n- Initializes DNS with the restored configuration\n- Creates a new process to handle DNS queries",
+      "promptAppearance": "Router>"
+    },
+    {
+      "instructions": "Problem 8: Verify Local DNS Resolution\n\nTest DNS resolution using the local DNS server again.\n\nType exactly: `nslookup example.com`",
+      "command": "nslookup example.com",
+      "output": "Server:  local.dns\nAddress:  192.168.1.1\n\nName:    example.com\nAddress:  93.184.216.34",
+      "explanation": "Final verification shows:\n\n- Local DNS server is now responding\n- Domain resolution is working correctly\n- The problem is resolved",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 9: DNS Service Monitoring\n\nCheck the DNS service logs for any warnings or errors.\n\nType exactly: `show log dns`",
+      "command": "show log dns",
+      "output": "2024-02-13 10:00:15 DNS service started\n2024-02-13 10:00:16 Loading zone files\n2024-02-13 10:00:17 DNS forwarding enabled\n2024-02-13 10:00:18 Listening on port 53",
+      "explanation": "The log shows:\n\n- Successful service startup\n- Normal DNS operation\n- No errors or warnings",
+      "promptAppearance": "Router>"
+    },
+    {
+      "instructions": "Problem 10: Advanced DNS Testing\n\nPerform a detailed DNS query using dig to verify all aspects of DNS resolution.\n\nType exactly: `dig example.com`",
+      "command": "dig example.com",
+      "output": "; <<>> DiG 9.16.1 <<>> example.com\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12345\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; ANSWER SECTION:\nexample.com.\t\t86400\tIN\tA\t93.184.216.34",
+      "explanation": "**dig** (Domain Information Groper) provides detailed DNS query information:\n\n- NOERROR status indicates successful resolution\n- Answer section shows correct IP address\n- TTL and record type information is present",
+      "promptAppearance": "C:\\Users\\Student>"
+    }
+,
+    {
+      "instructions": "Problem 11: Advanced Domain Check\n\nA user reports they cannot access intranet.local. Using your knowledge of DNS troubleshooting, check the DNS resolution for this domain.",
+      "command": "nslookup intranet.local",
+      "output": "Server:  UnKnown\nAddress:  192.168.1.1\n\n*** UnKnown can't find intranet.local: Server failed",
+      "explanation": "This tests your recall of the **nslookup** command for DNS resolution.\n\n- The output indicates:\n  - DNS server is responding but cannot resolve the domain\n  - This suggests a possible zone configuration issue",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 12: DNS Server Verification\n\nVerify the current DNS server configuration for all network adapters.",
+      "command": "ipconfig /all",
+      "output": "Windows IP Configuration\n\nEthernet adapter Ethernet:\n   DNS Servers . . . . . . . . . . . : 192.168.1.1\n                                       192.168.1.2\n   Primary DNS Suffix . . . . . . . : intranet.local\n   Connection-specific DNS Suffix . : intranet.local",
+      "explanation": "This tests your memory of how to display detailed network configuration.\n\n- The output shows:\n  - Primary and secondary DNS servers\n  - DNS suffix configuration\n  - Multiple network adapter settings",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 13: External DNS Query\n\nTest the resolution of website.net using Google's public DNS server to determine if the issue is with your local DNS infrastructure.",
+      "command": "nslookup website.net 8.8.8.8",
+      "output": "Server:  dns.google\nAddress:  8.8.8.8\n\nName:    website.net\nAddress:  104.21.63.91",
+      "explanation": "This tests if you remember how to query a specific DNS server.\n\n- Successful resolution indicates:\n  - External DNS queries work\n  - Issue likely with internal DNS configuration",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 14: Detailed DNS Analysis\n\nPerform a comprehensive DNS query for mail.company.org, including MX records and authoritative nameservers.",
+      "command": "dig mail.company.org",
+      "output": "; <<>> DiG 9.16.1 <<>> mail.company.org ANY\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 54321\n;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 2, ADDITIONAL: 1\n\n;; ANSWER SECTION:\nmail.company.org.\t3600\tIN\tA\t203.0.113.25\nmail.company.org.\t3600\tIN\tMX\t10 mailserver.company.org.",
+      "explanation": "This tests your knowledge of using **dig** for detailed DNS queries.\n\n- The ANY query returns:\n  - A records (IP addresses)\n  - MX records (mail servers)\n  - Authority information",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 15: DNS Service Health Check\n\nCheck the current status and health of the DNS service on the local DNS server.",
+      "command": "show service dns",
+      "output": "DNS Service Status: Running\nProcess ID: 5678\nZones Loaded: 12\nQueries (last hour): 1544\nCache Hit Rate: 87%",
+      "explanation": "This tests your recall of service status commands.\n\n- The output provides:\n  - Service running status\n  - Performance metrics\n  - Cache efficiency information",
+      "promptAppearance": "Router>"
+    }
+]

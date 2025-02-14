@@ -14,6 +14,26 @@
     { 
         "name": "Routers and Switches",
         "file": "RoutersSwitches.json"
+    },
+    {
+        "name": "Windows Connection Problems",
+        "file": "WindowConnect.json"
+    },
+    {
+        "name": "Linux Connection Problems",
+        "file": "LinuxConnect.json"
+    },
+    {
+        "name": "DNS Problems",
+        "file": "DNSProblems.json"
+    },
+    {
+        "name": "A Network Speed Problem on Floor 3",
+        "file": "NetworkSpeed.json"
+    },
+    { 
+        "name": "Secure Shell",
+        "file": "ssh.json"
     }
   ]
   
