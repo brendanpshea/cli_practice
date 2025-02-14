@@ -1,0 +1,93 @@
+[
+    {
+      "instructions": "Problem 1: Find Your Network Address\n\nLet's start by identifying your computer's network address and configuration.\n\nType exactly: `ipconfig`",
+      "command": "ipconfig",
+      "output": "Windows IP Configuration\n\nEthernet adapter Ethernet:\n   Connection-specific DNS Suffix  . : local\n   IPv4 Address. . . . . . . . . . . : 192.168.1.100\n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : 192.168.1.1",
+      "explanation": "The **ipconfig** command shows your network settings:\n\n- Your IP address is 192.168.1.100\n- You're on network 192.168.1.0\n- Your network mask is 255.255.255.0\n- Your gateway (router) is 192.168.1.1\n- This is similar to Linux's ifconfig",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 2: Get Detailed Network Information\n\nLet's see more detailed network configuration including DNS servers.\n\nType exactly: `ipconfig /all`",
+      "command": "ipconfig /all",
+      "output": "Windows IP Configuration\n\nEthernet adapter Ethernet:\n   Connection-specific DNS Suffix  . : local\n   Description . . . . . . . . . . . : Intel(R) Ethernet Connection\n   Physical Address. . . . . . . . . : 00-11-22-33-44-55\n   DHCP Enabled. . . . . . . . . . . : Yes\n   IPv4 Address. . . . . . . . . . . : 192.168.1.100\n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : 192.168.1.1\n   DNS Servers . . . . . . . . . . . : 192.168.1.1\n                                       8.8.8.8",
+      "explanation": "The **/all** switch shows additional details:\n\n- Your MAC address is 00-11-22-33-44-55\n- DHCP is enabled (automatic IP assignment)\n- Primary DNS is your router (192.168.1.1)\n- Secondary DNS is Google (8.8.8.8)\n- More detailed than basic ipconfig",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 3: Check Router Connection\n\nLet's verify we can reach the router.\n\nType exactly: `ping 192.168.1.1`",
+      "command": "ping 192.168.1.1",
+      "output": "Pinging 192.168.1.1 with 32 bytes of data:\nReply from 192.168.1.1: bytes=32 time<1ms TTL=64\nReply from 192.168.1.1: bytes=32 time<1ms TTL=64\nReply from 192.168.1.1: bytes=32 time<1ms TTL=64\nReply from 192.168.1.1: bytes=32 time<1ms TTL=64\n\nPing statistics for 192.168.1.1:\n    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),\nApproximate round trip times in milli-seconds:\n    Minimum = 0ms, Maximum = 0ms, Average = 0ms",
+      "explanation": "The **ping** command tests connectivity:\n\n- Sends 4 test packets by default\n- All packets received (0% loss)\n- Very fast response time (under 1ms)\n- Router is working and reachable",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 4: Find Network Devices\n\nLet's see what other devices are on your network.\n\nType exactly: `arp -a`",
+      "command": "arp -a",
+      "output": "Interface: 192.168.1.100\nInternet Address      Physical Address      Type\n192.168.1.1           00-11-22-33-44-55     dynamic\n192.168.1.5           00-de-ad-be-ef-00     dynamic\n192.168.1.10          00-aa-bb-cc-dd-ee     dynamic\n192.168.1.15          00-11-22-aa-bb-cc     dynamic",
+      "explanation": "The **arp** command shows known devices:\n\n- Shows IP and MAC address pairs\n- 192.168.1.1 is your router\n- Other addresses are different devices\n- 'dynamic' means automatically learned\n- Similar to Linux arp -a",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 5: View Active Connections\n\nLet's see what network connections are currently active.\n\nType exactly: `netstat -an`",
+      "command": "netstat -an",
+      "output": "Active Connections\n\nProto  Local Address          Foreign Address        State\nTCP    0.0.0.0:135            0.0.0.0:0              LISTENING\nTCP    0.0.0.0:445            0.0.0.0:0              LISTENING\nTCP    192.168.1.100:49234    216.58.194.46:443      ESTABLISHED\nTCP    192.168.1.100:49235    172.217.11.238:443     ESTABLISHED\nUDP    0.0.0.0:500            *:*\nUDP    0.0.0.0:3544           *:*",
+      "explanation": "The **netstat** command shows connections:\n\n- LISTENING ports are waiting for connections\n- ESTABLISHED shows active connections\n- Port 443 is HTTPS (secure web)\n- UDP ports are connectionless\n- Similar to Linux netstat",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 6: Check Network Route\n\nLet's see how network traffic is routed.\n\nType exactly: `route print`",
+      "command": "route print",
+      "output": "===========================================================================\nInterface List\n 12...00 11 22 33 44 55 ......Intel(R) Ethernet Connection\n===========================================================================\nIPv4 Route Table\n===========================================================================\nActive Routes:\nNetwork Destination        Netmask          Gateway       Interface  Metric\n          0.0.0.0          0.0.0.0      192.168.1.1    192.168.1.100     25\n        127.0.0.0        255.0.0.0         On-link         127.0.0.1    331\n      192.168.1.0    255.255.255.0         On-link     192.168.1.100    281",
+      "explanation": "The **route print** command shows routing:\n\n- 0.0.0.0 route is default (internet)\n- Traffic goes through 192.168.1.1\n- Local network is 192.168.1.0\n- Similar to Linux route -n",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 7: Test Internet Connection\n\nLet's verify internet connectivity.\n\nType exactly: `ping 8.8.8.8`",
+      "command": "ping 8.8.8.8",
+      "output": "Pinging 8.8.8.8 with 32 bytes of data:\nReply from 8.8.8.8: bytes=32 time=15ms TTL=116\nReply from 8.8.8.8: bytes=32 time=14ms TTL=116\nReply from 8.8.8.8: bytes=32 time=15ms TTL=116\nReply from 8.8.8.8: bytes=32 time=15ms TTL=116\n\nPing statistics for 8.8.8.8:\n    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),\nApproximate round trip times in milli-seconds:\n    Minimum = 14ms, Maximum = 15ms, Average = 14ms",
+      "explanation": "Testing internet connectivity:\n\n- Pinging Google's DNS (8.8.8.8)\n- All packets received\n- 15ms is a good response time\n- Internet connection works",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Problem 8: View Network Statistics\n\nLet's check network interface statistics.\n\nType exactly: `netstat -e`",
+      "command": "netstat -e",
+      "output": "Interface Statistics\n\n                           Received            Sent\n\nBytes                    2587943            847320\nUnicast packets            24561              8435\nNon-unicast packets          523               123\nDiscards                       0                 0\nErrors                         0                 0\nUnknown protocols              0",
+      "explanation": "The **netstat -e** shows traffic stats:\n\n- Shows bytes sent and received\n- Shows packet counts\n- No errors or discards\n- Network is healthy",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Practice Problem 1: Network Interface\n\nCheck your network interface and identify your IP address, subnet mask, and default gateway.",
+      "command": "ipconfig",
+      "output": "Windows IP Configuration\n\nEthernet adapter Ethernet:\n   Connection-specific DNS Suffix  . : corp.local\n   IPv4 Address. . . . . . . . . . . : 192.168.2.100\n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : 192.168.2.1",
+      "explanation": "Network configuration shows:\n\n- IP address is 192.168.2.100\n- Network is 192.168.2.0/24\n- Gateway is 192.168.2.1",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Practice Problem 2: DNS Configuration\n\nFind your DNS server settings.",
+      "command": "ipconfig /all",
+      "output": "Windows IP Configuration\n\nEthernet adapter Ethernet:\n   Connection-specific DNS Suffix  . : corp.local\n   DNS Servers . . . . . . . . . . . : 192.168.2.1\n                                       8.8.4.4",
+      "explanation": "DNS settings show:\n\n- Primary DNS is gateway\n- Google DNS as backup\n- Domain is corp.local",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Practice Problem 3: Network Devices\n\nList other devices on your network.",
+      "command": "arp -a",
+      "output": "Interface: 192.168.2.100\nInternet Address      Physical Address      Type\n192.168.2.1           00-11-22-33-44-66     dynamic\n192.168.2.5           00-de-ad-be-ef-11     dynamic\n192.168.2.15          00-aa-bb-cc-dd-ff     dynamic",
+      "explanation": "ARP table shows:\n\n- Gateway at 192.168.2.1\n- Two other network devices\n- All entries are dynamic",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Practice Problem 4: Connectivity Test\n\nTest connectivity to your gateway.",
+      "command": "ping 192.168.2.1",
+      "output": "Pinging 192.168.2.1 with 32 bytes of data:\nReply from 192.168.2.1: bytes=32 time<1ms TTL=64\nReply from 192.168.2.1: bytes=32 time<1ms TTL=64\nReply from 192.168.2.1: bytes=32 time<1ms TTL=64\nReply from 192.168.2.1: bytes=32 time<1ms TTL=64\n\nPing statistics for 192.168.2.1:\n    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),\nApproximate round trip times in milli-seconds:\n    Minimum = 0ms, Maximum = 0ms, Average = 0ms",
+      "explanation": "Ping results show:\n\n- Gateway is responding\n- Fast response times\n- No packet loss\n- Connection is good",
+      "promptAppearance": "C:\\Users\\Student>"
+    },
+    {
+      "instructions": "Practice Problem 5: Active Connections\n\nCheck your active network connections.",
+      "command": "netstat -an",
+      "output": "Active Connections\n\nProto  Local Address          Foreign Address        State\nTCP    0.0.0.0:135            0.0.0.0:0              LISTENING\nTCP    192.168.2.100:49234    172.16.1.100:443       ESTABLISHED\nTCP    192.168.2.100:49235    172.16.1.100:443       ESTABLISHED",
+      "explanation": "Connection list shows:\n\n- Two HTTPS connections\n- One listening service\n- Normal connection state",
+      "promptAppearance": "C:\\Users\\Student>"
+    }
+]

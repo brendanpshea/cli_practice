@@ -34,6 +34,14 @@
     { 
         "name": "Secure Shell",
         "file": "ssh.json"
+    },
+    {
+        "name": "Basic Linux Networking",
+        "file": "BasicLinuxNet.json"
+    },
+    {
+        "name": "Basic Windows Networking",
+        "file": "BasicWindowsNet.json"
     }
   ]
   
